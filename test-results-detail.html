@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Results - JavaScript Fundamentals</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+            font-feature-settings: "kern" 1;
+            font-kerning: normal;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            letter-spacing: -0.01em;
+            line-height: 1.5;
+        }
+        
+        .border-radius-15 {
+            border-radius: 15px;
+        }
+        
+        .animate-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: .5;
+            }
+        }
+        
+        .animate-spin {
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .code-block {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 16px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 font-sans">
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Test Header -->
+        <div class="mb-8">
+            <div class="relative bg-white/90 backdrop-blur-xl rounded-2xl overflow-hidden border border-gray-100 shadow-lg transition-all duration-300 hover:shadow-xl">
+                <!-- Background Decorative Elements -->
+                <div class="absolute inset-0 overflow-hidden opacity-10 pointer-events-none">
+                    <div class="absolute -right-10 -top-10 w-64 h-64 rounded-full bg-blue-400"></div>
+                    <div class="absolute -left-10 -bottom-10 w-64 h-64 rounded-full bg-purple-400"></div>
+                    <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-white/20"></div>
+                </div>
+                <div class="relative p-6 sm:p-8">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+                        <div>
+                            <h1 class="text-2xl sm:text-3xl font-medium text-gray-900 mb-2">
+                                JavaScript Fundamentals
+                            </h1>
+                            <p class="text-gray-600">
+                                Complete assessment of JavaScript programming skills and concepts
+                            </p>
+                        </div>
+                        <div class="mt-4 md:mt-0 flex items-center gap-3">
+                            <div class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">
+                                Completed
+                            </div>
+                            <div class="text-sm text-gray-500">
+                                Submitted 2 days ago
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stats Grid -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+                        <!-- Questions Card -->
+                        <div class="bg-white rounded-lg p-4 border border-gray-100 hover:shadow-md transition-shadow">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-sm font-medium text-gray-500">Questions</h3>
+                                <div class="p-1.5 rounded-lg bg-blue-100">
+                                    <i class="fas fa-target text-blue-600 flex items-center justify-center w-6 h-6"></i>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                                    <span class="text-xs font-medium">12</span>
+                                    <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                                    <span class="text-xs font-medium">2</span>
+                                    <div class="w-3 h-3 rounded-full bg-gray-400"></div>
+                                    <span class="text-xs font-medium">1</span>
+                                </div>
+                            </div>
+                            <div class="text-xs text-gray-500 mt-2">
+                                12 correct of 15 questions
+                            </div>
+                        </div>
+
+                        <!-- Score Card -->
+                        <div class="bg-white rounded-lg p-4 border border-gray-100 hover:shadow-md transition-shadow">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-sm font-medium text-gray-500">Average Score</h3>
+                                <div class="p-1.5 rounded-lg bg-green-100">
+                                    <i class="fas fa-award text-green-600 flex items-center justify-center w-6 h-6"></i>
+                                </div>
+                            </div>
+                            <div class="text-2xl font-bold mb-1 font-medium text-green-600">85%</div>
+                            <div class="text-xs text-gray-500">
+                                100% completed
+                            </div>
+                        </div>
+
+                        <!-- Time Taken Card -->
+                        <div class="bg-white rounded-lg p-4 border border-gray-100 hover:shadow-md transition-shadow">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-sm font-medium text-gray-500">Time Taken</h3>
+                                <div class="p-1.5 rounded-lg bg-purple-100">
+                                    <i class="fas fa-clock text-purple-600 flex items-center justify-center w-6 h-6"></i>
+                                </div>
+                            </div>
+                            <div class="text-2xl font-bold mb-1 font-medium text-purple-600">28 min</div>
+                            <div class="text-xs text-gray-500">
+                                30 min duration
+                            </div>
+                        </div>
+
+                        <!-- Language Card -->
+                        <div class="bg-white rounded-lg p-4 border border-gray-100 hover:shadow-md transition-shadow">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-sm font-medium text-gray-500">Language</h3>
+                                <div class="p-1.5 rounded-lg bg-yellow-100">
+                                    <i class="fas fa-code text-yellow-600 flex items-center justify-center w-6 h-6"></i>
+                                </div>
+                            </div>
+                            <div class="text-2xl font-bold mb-1 font-medium text-yellow-600">JavaScript</div>
+                            <div class="text-xs text-gray-500">
+                                Programming
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Right Column: Performance Stats -->
+            <div class="order-1 lg:order-2 lg:w-80">
+                <div class="space-y-6">
+                    <!-- Test Information -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
+                        <h3 class="text-lg font-medium text-gray-900 mb-3 border-b border-gray-200 pb-2">
+                            Test Information
+                        </h3>
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm text-gray-600">Category:</span>
+                                <span class="text-sm font-medium text-gray-800">Programming</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm text-gray-600">Level:</span>
+                                <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">Intermediate</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm text-gray-600">Duration:</span>
+                                <div class="flex text-sm items-center text-gray-500">
+                                    <i class="fas fa-clock mr-1 text-gray-400"></i>
+                                    <span>30 min</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm text-gray-600">Questions:</span>
+                                <span class="text-sm font-medium text-gray-800">15</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Areas of Strength -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                        <div class="p-5">
+                            <h3 class="text-lg font-medium text-gray-900 mb-3 border-b border-gray-200 pb-2">
+                                <i class="fas fa-trending-up text-green-500 mr-2"></i>
+                                Areas of Strength
+                            </h3>
+                            <ul class="space-y-1">
+                                <li class="flex items-center text-sm text-gray-600 px-2 py-1 hover:bg-gray-50 rounded-lg transition-colors">
+                                    <div class="h-2 w-2 rounded-full bg-green-500 mr-3 flex-shrink-0"></div>
+                                    Variable declarations and scoping
+                                </li>
+                                <li class="flex items-center text-sm text-gray-600 px-2 py-1 hover:bg-gray-50 rounded-lg transition-colors">
+                                    <div class="h-2 w-2 rounded-full bg-green-500 mr-3 flex-shrink-0"></div>
+                                    Function definitions and closures
+                                </li>
+                                <li class="flex items-center text-sm text-gray-600 px-2 py-1 hover:bg-gray-50 rounded-lg transition-colors">
+                                    <div class="h-2 w-2 rounded-full bg-green-500 mr-3 flex-shrink-0"></div>
+                                    Array methods and manipulation
+                                </li>
+                                <li class="flex items-center text-sm text-gray-600 px-2 py-1 hover:bg-gray-50 rounded-lg transition-colors">
+                                    <div class="h-2 w-2 rounded-full bg-green-500 mr-3 flex-shrink-0"></div>
+                                    Object-oriented programming concepts
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Areas for Improvement -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                        <div class="p-5">
+                            <h3 class="text-lg font-medium text-gray-900 mb-3 border-b border-gray-200 pb-2">
+                                <i class="fas fa-trending-down text-yellow-500 mr-2"></i>
+                                Areas for Improvement
+                            </h3>
+                            <ul class="space-y-1">
+                                <li class="flex items-center text-sm text-gray-600 px-2 py-1 hover:bg-gray-50 rounded-lg transition-colors">
+                                    <div class="h-2 w-2 rounded-full bg-yellow-500 mr-3 flex-shrink-0"></div>
+                                    Asynchronous programming (Promises, async/await)
+                                </li>
+                                <li class="flex items-center text-sm text-gray-600 px-2 py-1 hover:bg-gray-50 rounded-lg transition-colors">
+                                    <div class="h-2 w-2 rounded-full bg-yellow-500 mr-3 flex-shrink-0"></div>
+                                    Error handling and debugging techniques
+                                </li>
+                                <li class="flex items-center text-sm text-gray-600 px-2 py-1 hover:bg-gray-50 rounded-lg transition-colors">
+                                    <div class="h-2 w-2 rounded-full bg-yellow-500 mr-3 flex-shrink-0"></div>
+                                    Advanced ES6+ features
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Left Column: Main Content -->
+            <div class="order-2 lg:order-1 lg:flex-1 mt-8 lg:mt-0">
+                <!-- Overall Feedback Card -->
+                <div class="bg-blue-50 rounded-lg p-4 mb-6 border border-blue-200">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0 pt-0.5 px-3">
+                            <div class="h-10 w-10 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center text-white text-xl">
+                                AI
+                            </div>
+                        </div>
+                        <div class="ml-3">
+                            <h3 class="text-md font-medium text-gray-900">Overall Feedback</h3>
+                            <p class="mt-1 text-sm text-gray-600">
+                                Excellent work on the JavaScript fundamentals! You demonstrated strong understanding of core concepts like variable scoping, function definitions, and array manipulation. Your code is clean and well-structured. To further improve, focus on mastering asynchronous programming patterns and error handling techniques. Consider practicing with more complex scenarios involving Promises and async/await.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Response Filters -->
+                <div class="mb-6">
+                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                        <!-- Search Bar -->
+                        <div class="flex-1">
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-search h-4 w-4 text-gray-400"></i>
+                                </div>
+                                <input
+                                    type="text"
+                                    placeholder="Search questions..."
+                                    class="block w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-lg leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition text-sm"
+                                />
+                            </div>
+                        </div>
+
+                        <!-- Filter Dropdowns -->
+                        <div class="flex flex-col sm:flex-row gap-3">
+                            <div class="relative">
+                                <button class="inline-flex items-center px-4 py-2.5 border border-gray-200 rounded-lg bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 min-w-[140px] justify-between">
+                                    All Results
+                                    <i class="fas fa-chevron-down ml-2 h-4 w-4"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question Results -->
+                <div class="space-y-4">
+                    <!-- Question 1 -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden transition-all duration-200">
+                        <div class="px-6 py-4 cursor-pointer flex justify-between items-center">
+                            <div class="mr-4">
+                                <div class="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center">
+                                    <i class="fas fa-check text-white text-xs"></i>
+                                </div>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-gray-600 text-base font-normal pb-2">
+                                    1. What is the difference between let, const, and var in JavaScript?
+                                </p>
+                                <div class="flex items-center gap-3">
+                                    <span class="text-xs rounded-full flex px-2.5 py-0.5 items-center bg-gray-50">
+                                        <i class="fas fa-clock inline mr-1 h-3 w-3"></i>
+                                        3 min
+                                    </span>
+                                    <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">Intermediate</span>
+                                    <div class="flex gap-1">
+                                        <span class="px-2 py-1 bg-gray-100 text-gray-700 rounded-md text-xs font-medium">variables</span>
+                                        <span class="px-2 py-1 bg-gray-100 text-gray-700 rounded-md text-xs font-medium">scoping</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ml-4">
+                                <i class="fas fa-chevron-down h-5 w-5 text-gray-400"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Question 2 -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden transition-all duration-200">
+                        <div class="px-6 py-4 cursor-pointer flex justify-between items-center">
+                            <div class="mr-4">
+                                <div class="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center">
+                                    <i class="fas fa-check text-white text-xs"></i>
+                                </div>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-gray-600 text-base font-normal pb-2">
+                                    2. Explain the concept of closures in JavaScript with an example.
+                                </p>
+                                <div class="flex items-center gap-3">
+                                    <span class="text-xs rounded-full flex px-2.5 py-0.5 items-center bg-gray-50">
+                                        <i class="fas fa-clock inline mr-1 h-3 w-3"></i>
+                                        5 min
+                                    </span>
+                                    <span class="px-2 py-1 bg-orange-100 text-orange-800 rounded-full text-xs font-medium">Advanced</span>
+                                    <div class="flex gap-1">
+                                        <span class="px-2 py-1 bg-gray-100 text-gray-700 rounded-md text-xs font-medium">closures</span>
+                                        <span class="px-2 py-1 bg-gray-100 text-gray-700 rounded-md text-xs font-medium">functions</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ml-4">
+                                <i class="fas fa-chevron-down h-5 w-5 text-gray-400"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Question 3 -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden transition-all duration-200">
+                        <div class="px-6 py-4 cursor-pointer flex justify-between items-center">
+                            <div class="mr-4">
+                                <div class="w-6 h-6 rounded-full bg-red-500 flex items-center justify-center">
+                                    <i class="fas fa-times text-white text-xs"></i>
+                                </div>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-gray-600 text-base font-normal pb-2">
+                                    3. Write a function that returns a Promise and handles both success and error cases.
+                                </p>
+                                <div class="flex items-center gap-3">
+                                    <span class="text-xs rounded-full flex px-2.5 py-0.5 items-center bg-gray-50">
+                                        <i class="fas fa-clock inline mr-1 h-3 w-3"></i>
+                                        8 min
+                                    </span>
+                                    <span class="px-2 py-1 bg-orange-100 text-orange-800 rounded-full text-xs font-medium">Advanced</span>
+                                    <div class="flex gap-1">
+                                        <span class="px-2 py-1 bg-gray-100 text-gray-700 rounded-md text-xs font-medium">promises</span>
+                                        <span class="px-2 py-1 bg-gray-100 text-gray-700 rounded-md text-xs font-medium">async</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ml-4">
+                                <i class="fas fa-chevron-down h-5 w-5 text-gray-400"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Question 4 (Expanded Example) -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden transition-all duration-200">
+                        <div class="px-6 py-4 cursor-pointer flex justify-between items-center">
+                            <div class="mr-4">
+                                <div class="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center">
+                                    <i class="fas fa-check text-white text-xs"></i>
+                                </div>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-gray-600 text-base font-normal pb-2">
+                                    4. Implement a function that filters an array based on a callback function.
+                                </p>
+                                <div class="flex items-center gap-3">
+                                    <span class="text-xs rounded-full flex px-2.5 py-0.5 items-center bg-gray-50">
+                                        <i class="fas fa-clock inline mr-1 h-3 w-3"></i>
+                                        4 min
+                                    </span>
+                                    <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">Intermediate</span>
+                                    <div class="flex gap-1">
+                                        <span class="px-2 py-1 bg-gray-100 text-gray-700 rounded-md text-xs font-medium">arrays</span>
+                                        <span class="px-2 py-1 bg-gray-100 text-gray-700 rounded-md text-xs font-medium">callbacks</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ml-4">
+                                <i class="fas fa-chevron-up h-5 w-5 text-gray-400"></i>
+                            </div>
+                        </div>
+                        
+                        <!-- Expanded Content -->
+                        <div class="px-6 py-4 border-t border-gray-100">
+                            <!-- Question Description -->
+                            <div class="mb-4">
+                                <h5 class="text-sm font-medium text-gray-900 mb-2">Question</h5>
+                                <div class="text-sm bg-gray-50 rounded-lg p-4 text-gray-700 border border-gray-200">
+                                    <p>Create a custom filter function that mimics the behavior of Array.prototype.filter(). The function should take an array and a callback function as parameters, and return a new array containing only the elements for which the callback returns true.</p>
+                                </div>
+                            </div>
+
+                            <!-- Answer Input -->
+                            <div class="mb-4">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <h5 class="text-sm font-medium text-gray-900">Your Answer</h5>
+                                </div>
+                                <div class="code-block">
+                                    <pre><code>function customFilter(array, callback) {
+    const result = [];
+    for (let i = 0; i < array.length; i++) {
+        if (callback(array[i], i, array)) {
+            result.push(array[i]);
+        }
+    }
+    return result;
+}
+
+// Example usage:
+const numbers = [1, 2, 3, 4, 5];
+const evenNumbers = customFilter(numbers, x => x % 2 === 0);
+console.log(evenNumbers); // [2, 4]</code></pre>
+                                </div>
+                            </div>
+
+                            <!-- AI Feedback -->
+                            <div class="px-6 py-4 border-t border-gray-100 flex flex-col gap-4 mb-2">
+                                <div>
+                                    <h5 class="text-sm font-medium text-gray-900 mb-2">AI Feedback</h5>
+                                    <div class="text-sm bg-blue-50 rounded-lg p-3 text-gray-500 border border-blue-100">
+                                        <p>Excellent implementation! Your solution correctly implements the filter function with proper iteration, callback invocation, and result accumulation. The code is clean, readable, and handles all the required parameters (element, index, array) that the callback receives. The example usage also demonstrates good understanding of how the function works.</p>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <h5 class="text-sm font-medium text-gray-900 mb-2">Key Points</h5>
+                                    <div class="flex flex-wrap gap-2">
+                                        <span class="px-2 py-1 bg-gray-100 rounded-md text-xs font-medium text-gray-700">
+                                            Correct iteration
+                                        </span>
+                                        <span class="px-2 py-1 bg-gray-100 rounded-md text-xs font-medium text-gray-700">
+                                            Proper callback invocation
+                                        </span>
+                                        <span class="px-2 py-1 bg-gray-100 rounded-md text-xs font-medium text-gray-700">
+                                            Clean code structure
+                                        </span>
+                                        <span class="px-2 py-1 bg-gray-100 rounded-md text-xs font-medium text-gray-700">
+                                            Good example usage
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Question 5 -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden transition-all duration-200">
+                        <div class="px-6 py-4 cursor-pointer flex justify-between items-center">
+                            <div class="mr-4">
+                                <div class="w-6 h-6 rounded-full bg-gray-400 flex items-center justify-center">
+                                    <i class="fas fa-minus text-white text-xs"></i>
+                                </div>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-gray-600 text-base font-normal pb-2">
+                                    5. Explain the difference between == and === in JavaScript.
+                                </p>
+                                <div class="flex items-center gap-3">
+                                    <span class="text-xs rounded-full flex px-2.5 py-0.5 items-center bg-gray-50">
+                                        <i class="fas fa-clock inline mr-1 h-3 w-3"></i>
+                                        2 min
+                                    </span>
+                                    <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">Beginner</span>
+                                    <div class="flex gap-1">
+                                        <span class="px-2 py-1 bg-gray-100 text-gray-700 rounded-md text-xs font-medium">comparison</span>
+                                        <span class="px-2 py-1 bg-gray-100 text-gray-700 rounded-md text-xs font-medium">operators</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ml-4">
+                                <i class="fas fa-chevron-down h-5 w-5 text-gray-400"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- No Results Message (Hidden) -->
+                <div class="p-6 text-center bg-white rounded-xl shadow-sm border border-gray-200 hidden">
+                    <p class="text-gray-500">No questions match your filter criteria.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question Sets - Mockup</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .code-editor {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+        }
+        .syntax-highlight {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+        }
+        .status-icon {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        .status-pending { background-color: #6b7280; }
+        .status-correct { background-color: #10b981; }
+        .status-incorrect { background-color: #ef4444; }
+        .status-in-progress { background-color: #3b82f6; }
+        .status-saved { background-color: #f59e0b; }
+        
+        .difficulty-badge {
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+        .difficulty-easy { background-color: #dcfce7; color: #166534; }
+        .difficulty-medium { background-color: #fef3c7; color: #92400e; }
+        .difficulty-hard { background-color: #fee2e2; color: #991b1b; }
+        
+        .tag {
+            background-color: #f3f4f6;
+            color: #374151;
+            padding: 2px 6px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+        
+        .tab-active {
+            border-bottom: 2px solid #3b82f6;
+            color: #3b82f6;
+        }
+        
+        .tab-inactive {
+            border-bottom: 2px solid transparent;
+            color: #6b7280;
+        }
+        
+        .tab-inactive:hover {
+            color: #374151;
+            border-bottom-color: #d1d5db;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Header Section -->
+        <div class="relative bg-white/90 backdrop-blur-xl rounded-2xl overflow-hidden border border-gray-100 shadow-lg transition-all duration-300 hover:shadow-xl mb-8">
+            <!-- Background Decorative Elements -->
+            <div class="absolute inset-0 overflow-hidden opacity-10 pointer-events-none">
+                <div class="absolute -right-10 -top-10 w-64 h-64 rounded-full bg-blue-400"></div>
+                <div class="absolute -left-10 -bottom-10 w-64 h-64 rounded-full bg-purple-400"></div>
+                <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-white/20"></div>
+            </div>
+
+            <div class="relative p-6 sm:p-8">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div class="flex-1 min-w-0">
+                        <h1 class="text-2xl sm:text-3xl font-medium text-gray-900 group-hover:text-blue-600 transition-colors duration-300">
+                            Full Stack Developer Assessment
+                        </h1>
+                        <div class="flex items-center text-md text-gray-500 space-x-1">
+                            <span>8 Questions</span>
+                            <span>•</span>
+                            <span>45 min</span>
+                            <span>•</span>
+                            <span class="text-green-600">Due: Dec 25, 2024</span>
+                        </div>
+                    </div>
+                    <div class="flex space-x-3 shrink-0">
+                        <button class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-gradient-to-r from-green-600 to-green-600 hover:from-green-700 hover:to-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            Submit Test
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Right Column: Metadata -->
+            <div class="order-1 lg:order-2 lg:w-80">
+                <div class="space-y-6">
+                    <!-- Question Categories Card -->
+                    <div class="group relative bg-white/70 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200/50 mb-6 overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+                        <div class="absolute inset-0 rounded-2xl bg-gradient-to-br from-emerald-500/5 via-teal-500/5 to-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        <div class="relative">
+                            <div class="bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-600 text-white">
+                                <div class="w-full flex items-center justify-center p-4 hover:bg-white/10 transition-colors group/button">
+                                    <div class="text-center space-y-2">
+                                        <div class='flex items-center justify-center space-x-2'>
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c4.418 0 8 3.582 8 8s-3.582 8-8 8H7a4 4 0 01-4-4V7a4 4 0 014-4z" />
+                                            </svg>
+                                            <h3 class="text-base font-semibold">Question Categories</h3>
+                                        </div>
+                                        <p class="text-emerald-100 text-xs">3 configurations</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-4 space-y-2 max-h-72 overflow-y-auto">
+                                <div class="group flex items-center justify-between p-2 bg-white/70 backdrop-blur-sm rounded-lg border border-gray-200/50 shadow-sm hover:shadow-md transition-all duration-200">
+                                    <div class="flex items-center space-x-2 flex-1 min-w-0">
+                                        <div class="flex items-center space-x-1 text-xs text-gray-700 min-w-0">
+                                            <span class="font-semibold text-blue-700">3Q</span>
+                                            <span class="text-gray-400">•</span>
+                                            <span class="text-purple-700 truncate">JavaScript</span>
+                                            <span class="text-gray-400">•</span>
+                                            <span class="text-orange-700">Medium</span>
+                                            <span class="text-gray-400">•</span>
+                                            <span class="text-green-700">Code</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="group flex items-center justify-between p-2 bg-white/70 backdrop-blur-sm rounded-lg border border-gray-200/50 shadow-sm hover:shadow-md transition-all duration-200">
+                                    <div class="flex items-center space-x-2 flex-1 min-w-0">
+                                        <div class="flex items-center space-x-1 text-xs text-gray-700 min-w-0">
+                                            <span class="font-semibold text-blue-700">2Q</span>
+                                            <span class="text-gray-400">•</span>
+                                            <span class="text-purple-700 truncate">React</span>
+                                            <span class="text-gray-400">•</span>
+                                            <span class="text-orange-700">Hard</span>
+                                            <span class="text-gray-400">•</span>
+                                            <span class="text-green-700">Code</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="group flex items-center justify-between p-2 bg-white/70 backdrop-blur-sm rounded-lg border border-gray-200/50 shadow-sm hover:shadow-md transition-all duration-200">
+                                    <div class="flex items-center space-x-2 flex-1 min-w-0">
+                                        <div class="flex items-center space-x-1 text-xs text-gray-700 min-w-0">
+                                            <span class="font-semibold text-blue-700">3Q</span>
+                                            <span class="text-gray-400">•</span>
+                                            <span class="text-purple-700 truncate">General</span>
+                                            <span class="text-gray-400">•</span>
+                                            <span class="text-orange-700">Easy</span>
+                                            <span class="text-gray-400">•</span>
+                                            <span class="text-green-700">Text</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Invite Candidates Card -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">Invite Candidates</h3>
+                        <div class="space-y-3">
+                            <input type="email" placeholder="Enter email addresses..." class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <button class="w-full bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
+                                Send Invitations
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Left Column: Main Content -->
+            <div class="order-2 lg:order-1 lg:flex-1 mt-8 lg:mt-0">
+                <!-- Response Filters -->
+                <div class="mb-6">
+                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                        <!-- Search Bar -->
+                        <div class="flex-1">
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <svg class="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                    </svg>
+                                </div>
+                                <input type="text" placeholder="Search questions..." class="block w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-lg leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition text-sm">
+                            </div>
+                        </div>
+
+                        <!-- Filter Dropdowns -->
+                        <div class="flex flex-col sm:flex-row gap-3">
+                            <div class="relative">
+                                <button class="inline-flex items-center px-4 py-2.5 border border-gray-200 rounded-lg bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 min-w-[140px] justify-between">
+                                    All Status
+                                    <svg class="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Questions List -->
+                <div class="space-y-4">
+                    <!-- Question 1: Text Type (Expanded) -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden transition-all duration-200">
+                        <!-- Question Header -->
+                        <div class="px-6 py-4 cursor-pointer flex justify-between items-center">
+                            <div class="mr-4">
+                                <div class="status-icon status-in-progress"></div>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-gray-600 text-base font-normal pb-2">
+                                    1. Explain the concept of closures in JavaScript
+                                </p>
+                                <div class="flex items-center gap-3">
+                                    <span class="text-xs rounded-full flex px-2.5 py-0.5 items-center bg-gray-50">
+                                        <svg class="inline mr-1 h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        5 min
+                                    </span>
+                                    <span class="difficulty-badge difficulty-easy">Easy</span>
+                                    <span class="tag">JavaScript</span>
+                                    <span class="tag">Fundamentals</span>
+                                </div>
+                            </div>
+                            <div class="ml-4">
+                                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                                </svg>
+                            </div>
+                        </div>
+
+                        <!-- Question Content (Expanded) -->
+                        <div class="px-6 py-4 border-t border-gray-100">
+                            <!-- Question Description -->
+                            <div class="mb-4">
+                                <h5 class="text-sm font-medium text-gray-900 mb-2">Question</h5>
+                                <div class="text-sm bg-gray-50 rounded-lg p-4 text-gray-700 border border-gray-200">
+                                    <p>Explain what closures are in JavaScript, provide a practical example, and describe how they work in terms of scope and memory management. Include any potential issues or best practices related to closures.</p>
+                                </div>
+                            </div>
+
+                            <!-- Answer Input -->
+                            <div class="mb-4">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <h5 class="text-sm font-medium text-gray-900">Your Answer</h5>
+                                    <svg class="w-6 h-6 text-gray-500 cursor-pointer transition-colors hover:scale-125 hover:text-gray-700 bg-gray-100 rounded-full p-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                    </svg>
+                                </div>
+                                <textarea class="w-full text-sm rounded-lg p-3 border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 min-h-[150px]" placeholder="Type your answer here...">A closure in JavaScript is a function that has access to variables in its outer (enclosing) scope even after the outer function has returned. This happens because the inner function maintains a reference to the outer function's scope chain.
+
+Example:
+```javascript
+function outerFunction(x) {
+  return function innerFunction(y) {
+    return x + y;
+  };
+}
+
+const addFive = outerFunction(5);
+console.log(addFive(3)); // 8
+```
+
+The inner function "closes over" the variable x from the outer function's scope, creating a closure. This is useful for creating private variables and maintaining state in functional programming patterns.</textarea>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="px-6 py-4 border-t border-gray-100">
+                            <div class="flex justify-end gap-3 mb-2">
+                                <button class="bg-gradient-to-r from-green-600 to-green-700 text-white px-4 py-2 rounded-md font-medium text-sm flex items-center justify-center gap-1.5 shadow-sm hover:shadow-md">
+                                    Submit Answer
+                                </button>
+                                <button class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
+                                    Continue Next
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Question 2: Coding Type with Details (Expanded) -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden transition-all duration-200">
+                        <!-- Question Header -->
+                        <div class="px-6 py-4 cursor-pointer flex justify-between items-center">
+                            <div class="mr-4">
+                                <div class="status-icon status-correct"></div>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-gray-600 text-base font-normal pb-2">
+                                    2. Implement a function to find the longest common subsequence
+                                </p>
+                                <div class="flex items-center gap-3">
+                                    <span class="text-xs rounded-full flex px-2.5 py-0.5 items-center bg-gray-50">
+                                        <svg class="inline mr-1 h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        15 min
+                                    </span>
+                                    <span class="difficulty-badge difficulty-medium">Medium</span>
+                                    <span class="tag">JavaScript</span>
+                                    <span class="tag">Algorithms</span>
+                                </div>
+                            </div>
+                            <div class="ml-4">
+                                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                                </svg>
+                            </div>
+                        </div>
+
+                        <!-- Question Content (Expanded) -->
+                        <div class="px-6 py-4 border-t border-gray-100">
+                            <!-- Coding Question Navigation Tabs -->
+                            <div class="border-b border-gray-200 mb-3">
+                                <nav class="flex space-x-4">
+                                    <button class="pb-4 px-1 font-medium text-sm border-b-2 tab-active">
+                                        Description
+                                    </button>
+                                    <button class="pb-4 px-1 font-medium text-sm border-b-2 tab-inactive">
+                                        Solutions
+                                    </button>
+                                </nav>
+                            </div>
+
+                            <!-- Tab Content -->
+                            <div>
+                                <div class="mb-2">
+                                    <div class="prose max-w-none">
+                                        <h2 class="text-lg font-medium text-gray-900">Problem Description</h2>
+                                        <p class="text-gray-700">Write a function that finds the longest common subsequence (LCS) between two strings. The LCS is the longest sequence of characters that appear left to right (but not necessarily in a contiguous block) in both strings.</p>
+                                    </div>
+                                </div>
+                                
+                                <!-- Examples -->
+                                <div class="mb-2">
+                                    <h3 class="text-md font-medium text-gray-900 mb-2">Examples</h3>
+                                    <div class="space-y-3">
+                                        <div class="bg-gray-50 rounded-lg p-3 border border-gray-200">
+                                            <p class="text-sm text-gray-600 mb-1"><strong>Inputs:</strong> str1: "ABCDGH", str2: "AEDFHR"</p>
+                                            <p class="text-sm text-gray-600 mb-1"><strong>Output:</strong> "ADH"</p>
+                                            <p class="text-sm text-gray-600 mb-1"><strong>Explanation:</strong> The longest common subsequence is "ADH" which appears in both strings in that order.</p>
+                                        </div>
+                                        <div class="bg-gray-50 rounded-lg p-3 border border-gray-200">
+                                            <p class="text-sm text-gray-600 mb-1"><strong>Inputs:</strong> str1: "AGGTAB", str2: "GXTXAYB"</p>
+                                            <p class="text-sm text-gray-600 mb-1"><strong>Output:</strong> "GTAB"</p>
+                                            <p class="text-sm text-gray-600 mb-1"><strong>Explanation:</strong> The longest common subsequence is "GTAB" with length 4.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="px-6 py-4 border-t border-gray-100">
+                            <div class="flex justify-end gap-3 mb-2">
+                                <button class="bg-gradient-to-r from-green-600 to-green-700 text-white px-4 py-2 rounded-md font-medium text-sm flex items-center justify-center gap-1.5 shadow-sm hover:shadow-md">
+                                    Submit Answer
+                                </button>
+                                <button class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
+                                    Continue Next
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Question 3: Coding Type with Code Template (Expanded) -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden transition-all duration-200">
+                        <!-- Question Header -->
+                        <div class="px-6 py-4 cursor-pointer flex justify-between items-center">
+                            <div class="mr-4">
+                                <div class="status-icon status-pending"></div>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-gray-600 text-base font-normal pb-2">
+                                    3. Create a React component for a todo list
+                                </p>
+                                <div class="flex items-center gap-3">
+                                    <span class="text-xs rounded-full flex px-2.5 py-0.5 items-center bg-gray-50">
+                                        <svg class="inline mr-1 h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        20 min
+                                    </span>
+                                    <span class="difficulty-badge difficulty-hard">Hard</span>
+                                    <span class="tag">React</span>
+                                    <span class="tag">Frontend</span>
+                                </div>
+                            </div>
+                            <div class="ml-4">
+                                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                                </svg>
+                            </div>
+                        </div>
+
+                        <!-- Question Content (Expanded) -->
+                        <div class="px-6 py-4 border-t border-gray-100">
+                            <!-- Coding Question Navigation Tabs -->
+                            <div class="border-b border-gray-200 mb-3">
+                                <nav class="flex space-x-4">
+                                    <button class="pb-4 px-1 font-medium text-sm border-b-2 tab-inactive">
+                                        Description
+                                    </button>
+                                    <button class="pb-4 px-1 font-medium text-sm border-b-2 tab-active">
+                                        Solutions
+                                    </button>
+                                </nav>
+                            </div>
+
+                            <!-- Tab Content -->
+                            <div>
+                                <div class="flex justify-between items-center mb-2">
+                                    <h5 class="text-md font-medium text-gray-900">Starter Code</h5>
+                                    <button class="flex items-center text-xs text-gray-500 hover:text-gray-700 transition-colors">
+                                        <svg class="mr-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                                        </svg>
+                                        Dark mode
+                                    </button>
+                                </div>
+                                
+                                <!-- Code Template -->
+                                <div class="syntax-highlight">
+                                    <pre class="text-sm p-4 overflow-x-auto"><code class="language-javascript">import React, { useState } from 'react';
+
+const TodoList = () => {
+  // TODO: Add state management for todos
+  const [todos, setTodos] = useState([]);
+  const [inputValue, setInputValue] = useState('');
+
+  // TODO: Implement addTodo function
+  const addTodo = () => {
+    // Your implementation here
+  };
+
+  // TODO: Implement toggleTodo function
+  const toggleTodo = (id) => {
+    // Your implementation here
+  };
+
+  // TODO: Implement deleteTodo function
+  const deleteTodo = (id) => {
+    // Your implementation here
+  };
+
+  return (
+    &lt;div className="todo-container"&gt;
+      &lt;h1&gt;Todo List&lt;/h1&gt;
+      &lt;div className="add-todo"&gt;
+        &lt;input
+          type="text"
+          value={inputValue}
+          onChange={(e) =&gt; setInputValue(e.target.value)}
+          placeholder="Add a new todo..."
+        /&gt;
+        &lt;button onClick={addTodo}&gt;Add&lt;/button&gt;
+      &lt;/div&gt;
+      &lt;ul className="todo-list"&gt;
+        {/* TODO: Render todos here */}
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  );
+};
+
+export default TodoList;</code></pre>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="px-6 py-4 border-t border-gray-100">
+                            <div class="flex justify-end gap-3 mb-2">
+                                <button class="bg-gradient-to-r from-green-600 to-green-700 text-white px-4 py-2 rounded-md font-medium text-sm flex items-center justify-center gap-1.5 shadow-sm hover:shadow-md">
+                                    Submit Answer
+                                </button>
+                                <button class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
+                                    Continue Next
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Question 4: Collapsed Question -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden transition-all duration-200">
+                        <div class="px-6 py-4 cursor-pointer flex justify-between items-center">
+                            <div class="mr-4">
+                                <div class="status-icon status-saved"></div>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-gray-600 text-base font-normal pb-2">
+                                    4. What is the difference between let, const, and var in JavaScript?
+                                </p>
+                                <div class="flex items-center gap-3">
+                                    <span class="text-xs rounded-full flex px-2.5 py-0.5 items-center bg-gray-50">
+                                        <svg class="inline mr-1 h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        3 min
+                                    </span>
+                                    <span class="difficulty-badge difficulty-easy">Easy</span>
+                                    <span class="tag">JavaScript</span>
+                                    <span class="tag">Variables</span>
+                                </div>
+                            </div>
+                            <div class="ml-4">
+                                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Question 5: Collapsed Question -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden transition-all duration-200">
+                        <div class="px-6 py-4 cursor-pointer flex justify-between items-center">
+                            <div class="mr-4">
+                                <div class="status-icon status-incorrect"></div>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-gray-600 text-base font-normal pb-2">
+                                    5. Implement a binary search algorithm
+                                </p>
+                                <div class="flex items-center gap-3">
+                                    <span class="text-xs rounded-full flex px-2.5 py-0.5 items-center bg-gray-50">
+                                        <svg class="inline mr-1 h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        12 min
+                                    </span>
+                                    <span class="difficulty-badge difficulty-medium">Medium</span>
+                                    <span class="tag">JavaScript</span>
+                                    <span class="tag">Algorithms</span>
+                                </div>
+                            </div>
+                            <div class="ml-4">
+                                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Test Button Section -->
+                <div class="mt-8 flex flex-col sm:flex-row justify-center gap-4">
+                    <button class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gradient-to-r from-green-600 to-green-600 hover:from-green-700 hover:to-green-700 shadow-sm">
+                        Submit Test
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simple JavaScript for interactive elements
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tab switching functionality
+            const tabButtons = document.querySelectorAll('nav button');
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all tabs
+                    tabButtons.forEach(tab => {
+                        tab.classList.remove('tab-active');
+                        tab.classList.add('tab-inactive');
+                    });
+                    // Add active class to clicked tab
+                    this.classList.remove('tab-inactive');
+                    this.classList.add('tab-active');
+                });
+            });
+
+            // Question expansion functionality
+            const questionHeaders = document.querySelectorAll('.px-6.py-4.cursor-pointer');
+            questionHeaders.forEach(header => {
+                header.addEventListener('click', function() {
+                    const questionCard = this.parentElement;
+                    const content = questionCard.querySelector('.border-t');
+                    const chevron = this.querySelector('svg');
+                    
+                    if (content.style.display === 'none') {
+                        content.style.display = 'block';
+                        chevron.style.transform = 'rotate(180deg)';
+                    } else {
+                        content.style.display = 'none';
+                        chevron.style.transform = 'rotate(0deg)';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

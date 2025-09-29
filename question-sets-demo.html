@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question Sets - Feedback AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .backdrop-blur-xl {
+            backdrop-filter: blur(24px);
+        }
+        
+        .backdrop-blur-sm {
+            backdrop-filter: blur(4px);
+        }
+        
+        .backdrop-blur-md {
+            backdrop-filter: blur(12px);
+        }
+        
+        .animate-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: .5;
+            }
+        }
+        
+         .gradient-bg {
+             background: linear-gradient(to bottom right, #f9fafb, #f9fafb, #eff6ff);
+         }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .status-indicator {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 4px;
+            height: 100%;
+        }
+        
+        .status-completed { background: #10b981; }
+        .status-in-progress { background: #3b82f6; }
+        .status-not-started { background: #6b7280; }
+        .status-gradient { background: linear-gradient(135deg, #3b82f6, #8b5cf6, #ec4899); }
+        
+        .difficulty-badge {
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 9999px;
+            font-weight: 500;
+        }
+        
+         .difficulty-beginner { background: #f3f4f6; color: #374151; border: 1px solid #d1d5db; }
+         .difficulty-easy { background: #f3f4f6; color: #374151; border: 1px solid #d1d5db; }
+         .difficulty-medium { background: #f3f4f6; color: #374151; border: 1px solid #d1d5db; }
+         .difficulty-hard { background: #f3f4f6; color: #374151; border: 1px solid #d1d5db; }
+         .difficulty-expert { background: #f3f4f6; color: #374151; border: 1px solid #d1d5db; }
+        
+        .question-type-badge {
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 9999px;
+            font-weight: 500;
+        }
+        
+        .type-mcq { background: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe; }
+        .type-coding { background: #e9d5ff; color: #7c3aed; border: 1px solid #ddd6fe; }
+        .type-text { background: #e0e7ff; color: #3730a3; border: 1px solid #c7d2fe; }
+        .type-essay { background: #fce7f3; color: #be185d; border: 1px solid #fbcfe8; }
+        .type-tf { background: #ccfbf1; color: #0f766e; border: 1px solid #99f6e4; }
+        
+        .category-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .category-js { background: #f59e0b; }
+        .category-py { background: #3b82f6; }
+        .category-react { background: #06b6d4; }
+        .category-node { background: #10b981; }
+        .category-default { background: #8b5cf6; }
+        
+        .filter-dropdown {
+            position: relative;
+        }
+        
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            margin-top: 4px;
+            width: 192px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            z-index: 20;
+            max-height: 256px;
+            overflow-y: auto;
+        }
+        
+        .dropdown-item {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 8px 16px;
+            font-size: 14px;
+            transition: background-color 0.2s;
+        }
+        
+        .dropdown-item:hover {
+            background: #f3f4f6;
+        }
+        
+        .dropdown-item.active {
+            background: #dbeafe;
+            color: #2563eb;
+            font-weight: 500;
+        }
+        
+        .sort-button {
+            display: flex;
+            align-items: center;
+            padding: 6px 12px;
+            font-size: 12px;
+            border-radius: 6px;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        
+        .sort-button.active {
+            background: white;
+            color: #2563eb;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            font-weight: 500;
+        }
+        
+        .sort-button:not(.active) {
+            color: #6b7280;
+        }
+        
+        .view-toggle {
+            display: flex;
+            align-items: center;
+            background: #f3f4f6;
+            border-radius: 8px;
+            padding: 4px;
+        }
+        
+        .view-button {
+            padding: 6px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+        
+        .view-button.active {
+            background: white;
+            color: #2563eb;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        
+        .view-button:not(.active) {
+            color: #6b7280;
+        }
+        
+        .filter-bar {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            backdrop-filter: blur(12px);
+            background: rgba(255, 255, 255, 0.7);
+            border-top: 1px solid rgba(229, 231, 235, 0.7);
+            border-bottom: 1px solid rgba(229, 231, 235, 0.7);
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        
+        .grid-view {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            gap: 24px;
+        }
+        
+        @media (min-width: 768px) {
+            .grid-view {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .grid-view {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        .list-view {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0;
+        }
+        
+        .list-row {
+            display: grid;
+            grid-template-columns: 3fr 1fr 1fr 2fr 1fr;
+            gap: 8px;
+            height: 48px;
+            align-items: center;
+            padding: 0 12px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(4px);
+            border-bottom: 1px solid #f3f4f6;
+            transition: background-color 0.2s;
+        }
+        
+        .list-row:hover {
+            background: rgba(239, 246, 255, 0.5);
+        }
+        
+        .list-row.cursor-pointer {
+            cursor: pointer;
+        }
+        
+        .empty-state {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(4px);
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 48px 24px;
+            text-align: center;
+        }
+        
+        .page-header {
+            position: relative;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(24px);
+            border-bottom: 1px solid rgba(229, 231, 235, 0.7);
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        
+        
+        .search-input {
+            position: relative;
+            flex: 1;
+        }
+        
+        .search-input input {
+            width: 100%;
+            padding: 10px 40px 10px 40px;
+            border: 1px solid #d1d5db;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(4px);
+            font-size: 16px;
+            transition: all 0.2s;
+        }
+        
+        .search-input input:focus {
+            outline: none;
+            ring: 2px;
+            ring-color: #3b82f6;
+            border-color: #3b82f6;
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6b7280;
+        }
+        
+        .clear-icon {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            cursor: pointer;
+        }
+        
+        .clear-icon:hover {
+            color: #6b7280;
+        }
+        
+        .create-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 24px;
+            border: none;
+            border-radius: 12px;
+            background: #2563eb;
+            color: white;
+            font-weight: 500;
+            font-size: 16px;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        
+        .create-button:hover {
+            background: #1d4ed8;
+        }
+        
+        .create-button:focus {
+            outline: none;
+            ring: 2px;
+            ring-offset: 2px;
+            ring-color: #3b82f6;
+        }
+        
+        .category-card {
+            position: relative;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(4px);
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        
+        .category-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            border-color: #93c5fd;
+        }
+        
+        .category-card.selected {
+            ring: 2px;
+            ring-color: #3b82f6;
+            border-color: #3b82f6;
+        }
+        
+        .category-card.selected::after {
+            content: '';
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 12px;
+            height: 12px;
+            background: #3b82f6;
+            border-radius: 50%;
+        }
+        
+        .active-filter-tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 12px;
+            font-weight: 500;
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .active-filter-tag button {
+            margin-left: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 16px;
+            height: 16px;
+            color: #60a5fa;
+            cursor: pointer;
+        }
+        
+        .active-filter-tag button:hover {
+            color: #2563eb;
+        }
+        
+        .clear-filters {
+            font-size: 14px;
+            color: #2563eb;
+            cursor: pointer;
+        }
+        
+        .clear-filters:hover {
+            color: #1d4ed8;
+        }
+        
+        .question-set-card {
+            position: relative;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(24px);
+            height: 176px;
+            border: 1px solid #e5e7eb;
+            border-radius: 15px;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .question-set-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .question-set-card .status-indicator {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 4px;
+            height: 100%;
+        }
+        
+        .question-set-card .card-content {
+            padding: 16px;
+            padding-bottom: 48px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+        }
+        
+        .question-set-card .card-footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 8px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            border-top: 1px solid #f3f4f6;
+        }
+        
+        .action-button {
+            padding: 6px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.2s;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .action-button.primary {
+            color: #2563eb;
+            background: transparent;
+        }
+        
+        .action-button.primary:hover {
+            color: #1d4ed8;
+            background: #dbeafe;
+        }
+        
+        .action-button.secondary {
+            color: #6b7280;
+            background: transparent;
+        }
+        
+        .action-button.secondary:hover {
+            color: #374151;
+            background: #f3f4f6;
+        }
+        
+        .action-button.danger {
+            color: #dc2626;
+            background: transparent;
+        }
+        
+        .action-button.danger:hover {
+            color: white;
+            background: #fecaca;
+        }
+        
+        .timestamp {
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+            color: #6b7280;
+        }
+        
+        .timestamp i {
+            margin-right: 4px;
+        }
+        
+        .tooltip {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-bottom: 8px;
+            padding: 8px 12px;
+            background: #1f2937;
+            color: white;
+            font-size: 10px;
+            border-radius: 8px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+            white-space: nowrap;
+            min-width: max-content;
+            pointer-events: none;
+        }
+        
+        .tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 4px solid transparent;
+            border-top-color: #1f2937;
+        }
+        
+        @media (max-width: 1047px) {
+            .view-toggle {
+                display: none;
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .search-input input {
+                padding: 8px 32px 8px 32px;
+                font-size: 14px;
+            }
+            
+            .create-button {
+                padding: 8px 16px;
+                font-size: 14px;
+            }
+            
+            .grid-view {
+                grid-template-columns: 1fr;
+            }
+            
+            .list-row {
+                grid-template-columns: 1fr;
+                height: auto;
+                padding: 12px;
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen">
+    <!-- Page Header -->
+    <div class="page-header pt-6 pb-8 sm:py-16">
+        <!-- Background Decorative Elements -->
+        <div class="absolute inset-0 overflow-hidden opacity-5 pointer-events-none">
+            <div class="absolute -right-32 -top-32 w-96 h-96 rounded-full bg-blue-400"></div>
+            <div class="absolute -left-32 -bottom-32 w-96 h-96 rounded-full bg-purple-400"></div>
+        </div>
+        <div class="relative mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-gray-900">
+                    <span class="flex items-center justify-center gap-3">
+                        <span class="block">Hi John,</span>
+                    </span>
+                    <span class="flex items-center justify-center gap-3 text-blue-600 mt-1">
+                        <span class="block">Good Morning!</span>
+                    </span>
+                </h1>
+                <p class="max-w-3xl mx-auto mt-4 sm:mt-5 text-lg sm:text-xl text-gray-500 px-2">
+                    Create and manage candidate assessments to evaluate candidate performance effectively.
+                </p>
+
+                <div class="mt-6 sm:mt-8 max-w-xl mx-auto px-2">
+                    <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                        <!-- Search Section -->
+                        <div class="search-input">
+                            <div class="search-icon">
+                                <i class="fas fa-search"></i>
+                            </div>
+                            <input
+                                type="text"
+                                placeholder="Search assessment sets"
+                                value=""
+                            />
+                            <div class="clear-icon" style="display: none;">
+                                <i class="fas fa-times"></i>
+                            </div>
+                        </div>
+
+                        <!-- Create Button -->
+                        <button class="create-button">
+                            <i class="fas fa-plus mr-2"></i>
+                            <span class="hidden sm:inline">Generate Questions</span>
+                            <span class="sm:hidden">Generate</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Categories Section -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="space-y-4">
+            <!-- Categories Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+                <div class="category-card selected">
+                    <h3 class="text-lg font-medium text-gray-900 truncate">Data Structures</h3>
+                    <p class="text-sm text-gray-500 mt-1">42 questions</p>
+                </div>
+                <div class="category-card">
+                    <h3 class="text-lg font-medium text-gray-900 truncate">Algorithms</h3>
+                    <p class="text-sm text-gray-500 mt-1">53 questions</p>
+                </div>
+                <div class="category-card">
+                    <h3 class="text-lg font-medium text-gray-900 truncate">System Design</h3>
+                    <p class="text-sm text-gray-500 mt-1">28 questions</p>
+                </div>
+                <div class="category-card">
+                    <h3 class="text-lg font-medium text-gray-900 truncate">Frontend</h3>
+                    <p class="text-sm text-gray-500 mt-1">35 questions</p>
+                </div>
+                <div class="category-card">
+                    <h3 class="text-lg font-medium text-gray-900 truncate">Backend</h3>
+                    <p class="text-sm text-gray-500 mt-1">31 questions</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="filter-bar py-3">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                <!-- Filter Dropdowns -->
+                <div class="flex flex-wrap items-center justify-center lg:justify-start gap-2 sm:gap-3">
+                    <div class="filter-dropdown">
+                        <button class="flex items-center px-3 sm:px-4 py-2 border border-gray-300 rounded-lg text-xs sm:text-sm font-medium text-gray-700 bg-white/80 backdrop-blur-sm hover:bg-gray-50 focus:outline-none">
+                            <span>Category: </span>
+                            <span class="font-semibold ml-1 truncate max-w-16 sm:max-w-none">Data Structures</span>
+                        </button>
+                    </div>
+
+                    <div class="filter-dropdown">
+                        <button class="flex items-center px-3 sm:px-4 py-2 border border-gray-300 rounded-lg text-xs sm:text-sm font-medium text-gray-700 bg-white/80 backdrop-blur-sm hover:bg-gray-50 focus:outline-none">
+                            <span>Level: </span>
+                            <span class="font-semibold ml-1 truncate max-w-16 sm:max-w-none">All</span>
+                        </button>
+                    </div>
+
+                    <div class="filter-dropdown">
+                        <button class="flex items-center px-3 sm:px-4 py-2 border border-gray-300 rounded-lg text-xs sm:text-sm font-medium text-gray-700 bg-white/80 backdrop-blur-sm hover:bg-gray-50 focus:outline-none">
+                            <span>Language: </span>
+                            <span class="font-semibold ml-1 truncate max-w-12 sm:max-w-none">All</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Sort and View Controls -->
+                <div class="flex flex-col sm:flex-row items-center sm:items-center gap-3">
+                    <!-- Sort options -->
+                    <div class="flex items-center justify-center gap-2">
+                        <div class="hidden sm:flex items-center mx-1">
+                            <i class="fas fa-arrow-up w-3 h-4 text-gray-500"></i>
+                            <i class="fas fa-arrow-down w-3 h-4 text-gray-500"></i>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-1 rounded-lg bg-gray-100 p-1">
+                            <button class="sort-button active">
+                                <span>Newest</span>
+                            </button>
+                            <button class="sort-button">
+                                <span>Due Soon</span>
+                            </button>
+                            <button class="sort-button">
+                                <span>Questions</span>
+                            </button>
+                            <button class="sort-button">
+                                <span>Submissions</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- View Toggle -->
+                    <div class="hidden lg:flex items-center space-x-1 view-toggle">
+                        <button class="view-button active" title="Grid View">
+                            <i class="fas fa-th"></i>
+                        </button>
+                        <button class="view-button" title="List View">
+                            <i class="fas fa-list"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <!-- Active Filters -->
+        <div class="mb-3">
+            <!-- Results Summary -->
+            <div class="mb-2 text-center sm:text-left">
+                <p class="text-sm text-gray-600">
+                    Showing 6 of 6 test sets
+                </p>
+            </div>
+
+            <!-- Active Filters -->
+            <div class="flex items-center space-x-2">
+                <span class="text-sm text-gray-500">Active filters:</span>
+                <span class="active-filter-tag">
+                    Category: Data Structures
+                    <button>×</button>
+                </span>
+                <span class="clear-filters">Clear all</span>
+            </div>
+        </div>
+
+        <!-- Question Sets Grid -->
+        <div class="grid-view">
+            <!-- Question Set Card 1 -->
+            <div class="question-set-card card-hover">
+                <div class="status-indicator status-gradient"></div>
+                
+                <div class="card-content">
+                    <div class="flex-1">
+                        <div class="flex flex-col justify-between items-start">
+                            <h3 class="text-base font-medium text-gray-900 mb-1 group-hover:text-blue-600 transition-colors duration-300 truncate w-full">
+                                Array Manipulation Challenge
+                            </h3>
+                            <div class="flex items-center text-xs text-gray-500 mb-2 space-x-1">
+                                <span>15 Questions</span>
+                                <span>•</span>
+                                <span>45 min</span>
+                            </div>
+                        </div>
+
+                        <!-- Configuration Details -->
+                        <div class="flex flex-wrap gap-1.5 mb-2 min-h-[20px]">
+                            <span class="difficulty-badge difficulty-medium">5Q • Arrays • Medium • Code</span>
+                            <span class="difficulty-badge difficulty-easy">3Q • Loops • Easy • MCQ</span>
+                            <span class="difficulty-badge difficulty-hard">7Q • Sorting • Hard • Code</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer">
+                    <div>
+                        <div class="text-xs text-gray-500">
+                            3 submissions
+                        </div>
+                    </div>
+
+                    <div class="flex gap-2">
+                        <div class="timestamp">
+                            <i class="fas fa-calendar"></i>
+                            Created 2 days ago
+                        </div>
+                        <button class="action-button danger" title="Delete Question Set">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question Set Card 2 -->
+            <div class="question-set-card card-hover">
+                <div class="status-indicator status-completed"></div>
+                
+                <div class="card-content">
+                    <div class="flex-1">
+                        <div class="flex flex-col justify-between items-start">
+                            <h3 class="text-base font-medium text-gray-900 mb-1 group-hover:text-blue-600 transition-colors duration-300 truncate w-full">
+                                Binary Tree Traversal
+                            </h3>
+                            <div class="flex items-center text-xs text-gray-500 mb-2 space-x-1">
+                                <span>12 Questions</span>
+                                <span>•</span>
+                                <span>30 min</span>
+                            </div>
+                        </div>
+
+                        <!-- Configuration Details -->
+                        <div class="flex flex-wrap gap-1.5 mb-2 min-h-[20px]">
+                            <span class="difficulty-badge difficulty-medium">8Q • Trees • Medium • Code</span>
+                            <span class="difficulty-badge difficulty-easy">4Q • Recursion • Easy • MCQ</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer">
+                    <div>
+                        <div class="text-xs text-gray-500">
+                            7 submissions
+                        </div>
+                    </div>
+
+                    <div class="flex gap-2">
+                        <div class="timestamp">
+                            <i class="fas fa-calendar"></i>
+                            Created 1 week ago
+                        </div>
+                        <button class="action-button danger" title="Delete Question Set">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question Set Card 3 -->
+            <div class="question-set-card card-hover">
+                <div class="status-indicator status-in-progress"></div>
+                
+                <div class="card-content">
+                    <div class="flex-1">
+                        <div class="flex flex-col justify-between items-start">
+                            <h3 class="text-base font-medium text-gray-900 mb-1 group-hover:text-blue-600 transition-colors duration-300 truncate w-full">
+                                Dynamic Programming Basics
+                            </h3>
+                            <div class="flex items-center text-xs text-gray-500 mb-2 space-x-1">
+                                <span>20 Questions</span>
+                                <span>•</span>
+                                <span>60 min</span>
+                            </div>
+                        </div>
+
+                        <!-- Configuration Details -->
+                        <div class="flex flex-wrap gap-1.5 mb-2 min-h-[20px]">
+                            <span class="difficulty-badge difficulty-hard">10Q • DP • Hard • Code</span>
+                            <span class="difficulty-badge difficulty-medium">6Q • Optimization • Medium • Code</span>
+                            <span class="difficulty-badge difficulty-expert">4Q • Advanced • Expert • Code</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer">
+                    <div>
+                        <div class="text-xs text-gray-500">
+                            2 submissions
+                        </div>
+                    </div>
+
+                    <div class="flex gap-2">
+                        <div class="timestamp">
+                            <i class="fas fa-calendar"></i>
+                            Created 3 days ago
+                        </div>
+                        <button class="action-button danger" title="Delete Question Set">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question Set Card 4 -->
+            <div class="question-set-card card-hover">
+                <div class="status-indicator status-not-started"></div>
+                
+                <div class="card-content">
+                    <div class="flex-1">
+                        <div class="flex flex-col justify-between items-start">
+                            <h3 class="text-base font-medium text-gray-900 mb-1 group-hover:text-blue-600 transition-colors duration-300 truncate w-full">
+                                Graph Algorithms
+                            </h3>
+                            <div class="flex items-center text-xs text-gray-500 mb-2 space-x-1">
+                                <span>18 Questions</span>
+                                <span>•</span>
+                                <span>50 min</span>
+                            </div>
+                        </div>
+
+                        <!-- Configuration Details -->
+                        <div class="flex flex-wrap gap-1.5 mb-2 min-h-[20px]">
+                            <span class="difficulty-badge difficulty-medium">12Q • Graphs • Medium • Code</span>
+                            <span class="difficulty-badge difficulty-hard">6Q • BFS/DFS • Hard • Code</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer">
+                    <div>
+                        <div class="text-xs text-gray-500">
+                            No submissions
+                        </div>
+                    </div>
+
+                    <div class="flex gap-2">
+                        <div class="timestamp">
+                            <i class="fas fa-calendar"></i>
+                            Created 5 days ago
+                        </div>
+                        <button class="action-button danger" title="Delete Question Set">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question Set Card 5 -->
+            <div class="question-set-card card-hover">
+                <div class="status-indicator status-gradient"></div>
+                
+                <div class="card-content">
+                    <div class="flex-1">
+                        <div class="flex flex-col justify-between items-start">
+                            <h3 class="text-base font-medium text-gray-900 mb-1 group-hover:text-blue-600 transition-colors duration-300 truncate w-full">
+                                Hash Table Operations
+                            </h3>
+                            <div class="flex items-center text-xs text-gray-500 mb-2 space-x-1">
+                                <span>10 Questions</span>
+                                <span>•</span>
+                                <span>25 min</span>
+                            </div>
+                        </div>
+
+                        <!-- Configuration Details -->
+                        <div class="flex flex-wrap gap-1.5 mb-2 min-h-[20px]">
+                            <span class="difficulty-badge difficulty-easy">6Q • Hashing • Easy • Code</span>
+                            <span class="difficulty-badge difficulty-medium">4Q • Collision • Medium • Code</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer">
+                    <div>
+                        <div class="text-xs text-gray-500">
+                            5 submissions
+                        </div>
+                    </div>
+
+                    <div class="flex gap-2">
+                        <div class="timestamp">
+                            <i class="fas fa-calendar"></i>
+                            Created 1 day ago
+                        </div>
+                        <button class="action-button danger" title="Delete Question Set">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question Set Card 6 -->
+            <div class="question-set-card card-hover">
+                <div class="status-indicator status-completed"></div>
+                
+                <div class="card-content">
+                    <div class="flex-1">
+                        <div class="flex flex-col justify-between items-start">
+                            <h3 class="text-base font-medium text-gray-900 mb-1 group-hover:text-blue-600 transition-colors duration-300 truncate w-full">
+                                String Processing
+                            </h3>
+                            <div class="flex items-center text-xs text-gray-500 mb-2 space-x-1">
+                                <span>14 Questions</span>
+                                <span>•</span>
+                                <span>35 min</span>
+                            </div>
+                        </div>
+
+                        <!-- Configuration Details -->
+                        <div class="flex flex-wrap gap-1.5 mb-2 min-h-[20px]">
+                            <span class="difficulty-badge difficulty-easy">8Q • Strings • Easy • Code</span>
+                            <span class="difficulty-badge difficulty-medium">4Q • Pattern • Medium • Code</span>
+                            <span class="difficulty-badge difficulty-hard">2Q • Regex • Hard • Code</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer">
+                    <div>
+                        <div class="text-xs text-gray-500">
+                            9 submissions
+                        </div>
+                    </div>
+
+                    <div class="flex gap-2">
+                        <div class="timestamp">
+                            <i class="fas fa-calendar"></i>
+                            Created 4 days ago
+                        </div>
+                        <button class="action-button danger" title="Delete Question Set">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

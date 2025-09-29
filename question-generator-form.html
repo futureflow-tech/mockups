@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question Generator Form Mockup</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #e0f2fe 100%);
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            width: 100%;
+            max-width: 64rem;
+            max-height: 90vh;
+            overflow: hidden;
+        }
+
+        .modal-body {
+            padding: 24px;
+            overflow-y: auto;
+            max-height: 90vh;
+            position: relative;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .header h3 {
+            font-size: 18px;
+            font-weight: 500;
+            color: #1f2937;
+        }
+
+        .close-btn {
+            color: #9ca3af;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .close-btn:hover {
+            color: #6b7280;
+            background: #f3f4f6;
+        }
+
+        .form-section {
+            margin-bottom: 24px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .form-group {
+            position: relative;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 4px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 8px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(4px);
+            transition: all 0.2s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+
+        .dropdown-container {
+            position: relative;
+        }
+
+        .dropdown-input {
+            position: relative;
+        }
+
+        .dropdown-input input {
+            padding-right: 40px;
+        }
+
+        .dropdown-buttons {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            gap: 4px;
+        }
+
+        .dropdown-btn {
+            background: none;
+            border: none;
+            color: #9ca3af;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .dropdown-btn:hover {
+            color: #6b7280;
+            background: #f3f4f6;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+            max-height: 256px;
+            overflow-y: auto;
+            margin-top: 4px;
+        }
+
+        .dropdown-option {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 8px 16px;
+            font-size: 14px;
+            color: #374151;
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .dropdown-option:hover {
+            background: #f3f4f6;
+        }
+
+        .dropdown-option.selected {
+            background: #dbeafe;
+            color: #2563eb;
+            font-weight: 500;
+        }
+
+        .divider {
+            height: 1px;
+            background: #e5e7eb;
+            margin: 24px 0;
+        }
+
+        .question-configs {
+            margin-bottom: 24px;
+        }
+
+        .config-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .add-config-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #2563eb;
+            background: #dbeafe;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .add-config-btn:hover {
+            background: #bfdbfe;
+            transform: scale(1.02);
+        }
+
+        .config-item {
+            padding: 16px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            background: #f9fafb;
+            margin-bottom: 16px;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .config-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+            align-items: end;
+        }
+
+        .config-grid .form-group {
+            margin-bottom: 0;
+        }
+
+        .questions-input {
+            display: flex;
+            gap: 8px;
+            align-items: end;
+        }
+
+        .questions-input .form-group {
+            flex: 1;
+        }
+
+        .remove-btn {
+            padding: 8px;
+            color: #ef4444;
+            background: none;
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .remove-btn:hover {
+            color: #dc2626;
+            background: #fef2f2;
+            transform: scale(1.1);
+        }
+
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .error-message {
+            color: #f87171;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .total-questions {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .total-questions span {
+            font-weight: 600;
+        }
+
+        .generate-btn {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border: none;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 8px;
+            color: white;
+            background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+
+        .generate-btn:hover {
+            background: linear-gradient(135deg, #1d4ed8 0%, #4338ca 100%);
+            transform: scale(1.02);
+        }
+
+        .generate-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .loading-spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .config-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-body {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-body">
+                <!-- Header -->
+                <div class="header">
+                    <h3>Interview Assessment Builder</h3>
+                    <button class="close-btn">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Top-level inputs -->
+                <div class="form-section">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Target Role</label>
+                            <div class="dropdown-container">
+                                <div class="dropdown-input">
+                                    <input type="text" class="form-input" placeholder="Select target role..." value="Software Engineer">
+                                    <div class="dropdown-buttons">
+                                        <button class="dropdown-btn">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <polyline points="6,9 12,15 18,9"></polyline>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Level</label>
+                            <div class="dropdown-container">
+                                <div class="dropdown-input">
+                                    <input type="text" class="form-input" placeholder="Select experience level..." value="Mid-Level">
+                                    <div class="dropdown-buttons">
+                                        <button class="dropdown-btn">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <polyline points="6,9 12,15 18,9"></polyline>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Language</label>
+                            <div class="dropdown-container">
+                                <div class="dropdown-input">
+                                    <input type="text" class="form-input" placeholder="Choose programming language..." value="Python">
+                                    <div class="dropdown-buttons">
+                                        <button class="dropdown-btn">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <polyline points="6,9 12,15 18,9"></polyline>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Due Date</label>
+                            <input type="date" class="form-input" value="2024-02-15">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <!-- Question configurations -->
+                <div class="question-configs">
+                    <div class="config-header">
+                        <h3>Question Configurations</h3>
+                        <button class="add-config-btn">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                            Add Configuration
+                        </button>
+                    </div>
+
+                    <div class="config-item">
+                        <div class="config-grid">
+                            <div class="form-group">
+                                <label class="form-label">Skill Area</label>
+                                <div class="dropdown-container">
+                                    <div class="dropdown-input">
+                                        <input type="text" class="form-input" placeholder="Choose skill area to focus on..." value="Basic Programming">
+                                        <div class="dropdown-buttons">
+                                            <button class="dropdown-btn">
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <polyline points="6,9 12,15 18,9"></polyline>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Difficulty</label>
+                                <div class="dropdown-container">
+                                    <div class="dropdown-input">
+                                        <input type="text" class="form-input" placeholder="Select difficulty..." value="Medium">
+                                        <div class="dropdown-buttons">
+                                            <button class="dropdown-btn">
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <polyline points="6,9 12,15 18,9"></polyline>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Question Type</label>
+                                <div class="dropdown-container">
+                                    <div class="dropdown-input">
+                                        <input type="text" class="form-input" placeholder="Choose format..." value="Text">
+                                        <div class="dropdown-buttons">
+                                            <button class="dropdown-btn">
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <polyline points="6,9 12,15 18,9"></polyline>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="questions-input">
+                                <div class="form-group">
+                                    <label class="form-label">Questions</label>
+                                    <input type="number" class="form-input" min="1" max="20" value="5">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="config-item">
+                        <div class="config-grid">
+                            <div class="form-group">
+                                <label class="form-label">Skill Area</label>
+                                <div class="dropdown-container">
+                                    <div class="dropdown-input">
+                                        <input type="text" class="form-input" placeholder="Choose skill area to focus on..." value="Algorithms">
+                                        <div class="dropdown-buttons">
+                                            <button class="dropdown-btn">
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <polyline points="6,9 12,15 18,9"></polyline>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Difficulty</label>
+                                <div class="dropdown-container">
+                                    <div class="dropdown-input">
+                                        <input type="text" class="form-input" placeholder="Select difficulty..." value="Hard">
+                                        <div class="dropdown-buttons">
+                                            <button class="dropdown-btn">
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <polyline points="6,9 12,15 18,9"></polyline>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Question Type</label>
+                                <div class="dropdown-container">
+                                    <div class="dropdown-input">
+                                        <input type="text" class="form-input" placeholder="Choose format..." value="Coding">
+                                        <div class="dropdown-buttons">
+                                            <button class="dropdown-btn">
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <polyline points="6,9 12,15 18,9"></polyline>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="questions-input">
+                                <div class="form-group">
+                                    <label class="form-label">Questions</label>
+                                    <input type="number" class="form-input" min="1" max="20" value="3">
+                                </div>
+                                <button class="remove-btn" title="Remove configuration">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="3,6 5,6 21,6"></polyline>
+                                        <path d="m19,6v14a2,2 0 0,1 -2,2H7a2,2 0 0,1 -2,-2V6m3,0V4a2,2 0 0,1 2,-2h4a2,2 0 0,1 2,2v2"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="config-item">
+                        <div class="config-grid">
+                            <div class="form-group">
+                                <label class="form-label">Skill Area</label>
+                                <div class="dropdown-container">
+                                    <div class="dropdown-input">
+                                        <input type="text" class="form-input" placeholder="Choose skill area to focus on..." value="System Design">
+                                        <div class="dropdown-buttons">
+                                            <button class="dropdown-btn">
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <polyline points="6,9 12,15 18,9"></polyline>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Difficulty</label>
+                                <div class="dropdown-container">
+                                    <div class="dropdown-input">
+                                        <input type="text" class="form-input" placeholder="Select difficulty..." value="Easy">
+                                        <div class="dropdown-buttons">
+                                            <button class="dropdown-btn">
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <polyline points="6,9 12,15 18,9"></polyline>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Question Type</label>
+                                <div class="dropdown-container">
+                                    <div class="dropdown-input">
+                                        <input type="text" class="form-input" placeholder="Choose format..." value="Text">
+                                        <div class="dropdown-buttons">
+                                            <button class="dropdown-btn">
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <polyline points="6,9 12,15 18,9"></polyline>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="questions-input">
+                                <div class="form-group">
+                                    <label class="form-label">Questions</label>
+                                    <input type="number" class="form-input" min="1" max="20" value="2">
+                                </div>
+                                <button class="remove-btn" title="Remove configuration">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="3,6 5,6 21,6"></polyline>
+                                        <path d="m19,6v14a2,2 0 0,1 -2,2H7a2,2 0 0,1 -2,-2V6m3,0V4a2,2 0 0,1 2,-2h4a2,2 0 0,1 2,2v2"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <!-- Footer -->
+                <div class="footer">
+                    <div>
+                        <div class="total-questions">
+                            Total Questions: <span>10</span>
+                        </div>
+                    </div>
+
+                    <button class="generate-btn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="22" y1="2" x2="11" y2="13"></line>
+                            <polygon points="22,2 15,22 11,13 2,9 22,2"></polygon>
+                        </svg>
+                        Generate
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simple interactive functionality for demonstration
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add configuration button
+            const addConfigBtn = document.querySelector('.add-config-btn');
+            const configsContainer = document.querySelector('.question-configs');
+            
+            addConfigBtn.addEventListener('click', function() {
+                const newConfig = document.querySelector('.config-item').cloneNode(true);
+                const questionsInput = newConfig.querySelector('.questions-input');
+                
+                // Add remove button if it doesn't exist
+                if (!questionsInput.querySelector('.remove-btn')) {
+                    const removeBtn = document.createElement('button');
+                    removeBtn.className = 'remove-btn';
+                    removeBtn.title = 'Remove configuration';
+                    removeBtn.innerHTML = `
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="3,6 5,6 21,6"></polyline>
+                            <path d="m19,6v14a2,2 0 0,1 -2,2H7a2,2 0 0,1 -2,-2V6m3,0V4a2,2 0 0,1 2,-2h4a2,2 0 0,1 2,2v2"></path>
+                        </svg>
+                    `;
+                    questionsInput.appendChild(removeBtn);
+                }
+                
+                // Clear input values
+                const inputs = newConfig.querySelectorAll('input');
+                inputs.forEach(input => {
+                    if (input.type === 'number') {
+                        input.value = '3';
+                    } else {
+                        input.value = '';
+                    }
+                });
+                
+                configsContainer.appendChild(newConfig);
+                updateTotalQuestions();
+            });
+
+            // Remove configuration buttons
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.remove-btn')) {
+                    const configItem = e.target.closest('.config-item');
+                    const configs = document.querySelectorAll('.config-item');
+                    
+                    if (configs.length > 1) {
+                        configItem.remove();
+                        updateTotalQuestions();
+                    }
+                }
+            });
+
+            // Update total questions when number inputs change
+            document.addEventListener('input', function(e) {
+                if (e.target.type === 'number' && e.target.closest('.questions-input')) {
+                    updateTotalQuestions();
+                }
+            });
+
+            function updateTotalQuestions() {
+                const numberInputs = document.querySelectorAll('.questions-input input[type="number"]');
+                let total = 0;
+                numberInputs.forEach(input => {
+                    total += parseInt(input.value) || 0;
+                });
+                document.querySelector('.total-questions span').textContent = total;
+            }
+
+            // Generate button click
+            const generateBtn = document.querySelector('.generate-btn');
+            generateBtn.addEventListener('click', function() {
+                // Simulate loading state
+                this.innerHTML = `
+                    <div class="loading-spinner"></div>
+                    Generating...
+                `;
+                this.disabled = true;
+                
+                // Reset after 3 seconds
+                setTimeout(() => {
+                    this.innerHTML = `
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="22" y1="2" x2="11" y2="13"></line>
+                            <polygon points="22,2 15,22 11,13 2,9 22,2"></polygon>
+                        </svg>
+                        Generate
+                    `;
+                    this.disabled = false;
+                }, 3000);
+            });
+        });
+    </script>
+</body>
+</html>

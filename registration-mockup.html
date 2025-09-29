@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration - Feedback AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #e0f2fe 100%);
+        }
+        
+        .form-input:focus {
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            border-color: #3b82f6;
+        }
+        
+        .form-input.error {
+            border-color: #ef4444;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+        }
+        
+        .register-button {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            transition: all 0.2s ease;
+        }
+        
+        .register-button:hover {
+            background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+        }
+        
+        .register-button:disabled {
+            background: #9ca3af;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .loading-spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        
+        .icon-input {
+            position: relative;
+        }
+        
+        .icon-input .icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            pointer-events: none;
+        }
+        
+        .icon-input input {
+            padding-left: 40px;
+        }
+        
+        .password-toggle {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        
+        .password-toggle:hover {
+            color: #6b7280;
+        }
+        
+        .password-strength {
+            height: 4px;
+            background: #e5e7eb;
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 4px;
+        }
+        
+        .password-strength-bar {
+            height: 100%;
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+        
+        .strength-weak { background: #ef4444; width: 25%; }
+        .strength-fair { background: #f59e0b; width: 50%; }
+        .strength-good { background: #10b981; width: 75%; }
+        .strength-strong { background: #059669; width: 100%; }
+    </style>
+</head>
+<body class="min-h-screen gradient-bg flex items-center justify-center p-4">
+    <div class="w-full max-w-2xl">
+        <!-- Logo and Header -->
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-xl mb-4">
+                <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+            </div>
+            <h1 class="text-2xl font-bold text-gray-900 mb-2">Create Your Account</h1>
+            <p class="text-gray-600">Join thousands of organizations using our platform</p>
+        </div>
+
+        <!-- Registration Form -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+            <form id="registrationForm" class="space-y-6">
+                <!-- Name Fields -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            First Name *
+                        </label>
+                        <input
+                            type="text"
+                            id="firstName"
+                            name="firstName"
+                            class="form-input w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                            placeholder="Enter your first name"
+                            required
+                        />
+                        <div id="firstNameError" class="mt-1 text-sm text-red-600 hidden"></div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Last Name *
+                        </label>
+                        <input
+                            type="text"
+                            id="lastName"
+                            name="lastName"
+                            class="form-input w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                            placeholder="Enter your last name"
+                            required
+                        />
+                        <div id="lastNameError" class="mt-1 text-sm text-red-600 hidden"></div>
+                    </div>
+                </div>
+
+                <!-- Email Field -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Email Address *
+                    </label>
+                    <div class="icon-input">
+                        <svg class="icon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"/>
+                        </svg>
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            class="form-input w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                            placeholder="Enter your email address"
+                            required
+                        />
+                    </div>
+                    <div id="emailError" class="mt-1 text-sm text-red-600 hidden"></div>
+                </div>
+
+                <!-- Contact Number Field -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Contact Number *
+                    </label>
+                    <div class="icon-input">
+                        <svg class="icon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                        </svg>
+                        <input
+                            type="tel"
+                            id="contactNumber"
+                            name="contactNumber"
+                            class="form-input w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                            placeholder="Enter your contact number"
+                            required
+                        />
+                    </div>
+                    <div id="contactNumberError" class="mt-1 text-sm text-red-600 hidden"></div>
+                </div>
+
+                <!-- Address Field -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Address *
+                    </label>
+                    <div class="icon-input">
+                        <svg class="icon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        </svg>
+                        <input
+                            type="text"
+                            id="address"
+                            name="address"
+                            class="form-input w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                            placeholder="Enter your address"
+                            required
+                        />
+                    </div>
+                    <div id="addressError" class="mt-1 text-sm text-red-600 hidden"></div>
+                </div>
+
+                <!-- Password Field -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Password *
+                    </label>
+                    <div class="icon-input">
+                        <svg class="icon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                        </svg>
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            class="form-input w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                            placeholder="Create a strong password"
+                            required
+                        />
+                        <button
+                            type="button"
+                            id="togglePassword"
+                            class="password-toggle"
+                            onclick="togglePasswordVisibility()"
+                        >
+                            <svg id="eyeIcon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div id="passwordError" class="mt-1 text-sm text-red-600 hidden"></div>
+                    <div id="passwordStrength" class="password-strength hidden">
+                        <div id="passwordStrengthBar" class="password-strength-bar"></div>
+                    </div>
+                    <div id="passwordRequirements" class="mt-2 text-xs text-gray-600">
+                        <p>Password must contain:</p>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li id="reqLength" class="text-gray-500">At least 8 characters</li>
+                            <li id="reqUppercase" class="text-gray-500">One uppercase letter</li>
+                            <li id="reqLowercase" class="text-gray-500">One lowercase letter</li>
+                            <li id="reqNumber" class="text-gray-500">One number</li>
+                            <li id="reqSpecial" class="text-gray-500">One special character</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Confirm Password Field -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Confirm Password *
+                    </label>
+                    <div class="icon-input">
+                        <svg class="icon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                        </svg>
+                        <input
+                            type="password"
+                            id="confirmPassword"
+                            name="confirmPassword"
+                            class="form-input w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                            placeholder="Confirm your password"
+                            required
+                        />
+                        <button
+                            type="button"
+                            id="toggleConfirmPassword"
+                            class="password-toggle"
+                            onclick="toggleConfirmPasswordVisibility()"
+                        >
+                            <svg id="eyeIconConfirm" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div id="confirmPasswordError" class="mt-1 text-sm text-red-600 hidden"></div>
+                </div>
+
+                <!-- Terms and Conditions -->
+                <div class="flex items-start">
+                    <input
+                        type="checkbox"
+                        id="terms"
+                        name="terms"
+                        class="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                        required
+                    />
+                    <label for="terms" class="ml-2 text-sm text-gray-700">
+                        I agree to the
+                        <a href="#" class="text-blue-600 hover:underline">Terms of Service</a>
+                        and
+                        <a href="#" class="text-blue-600 hover:underline">Privacy Policy</a>
+                    </label>
+                </div>
+                <div id="termsError" class="mt-1 text-sm text-red-600 hidden"></div>
+
+                <!-- Register Button -->
+                <button
+                    type="submit"
+                    id="registerButton"
+                    class="register-button w-full py-3 px-4 text-white font-medium rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all"
+                >
+                    <span id="buttonText">Create Account</span>
+                    <div id="loadingSpinner" class="loading-spinner hidden"></div>
+                </button>
+
+                <!-- Divider -->
+                <div class="relative">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="w-full border-t border-gray-300"></div>
+                    </div>
+                    <div class="relative flex justify-center text-sm">
+                        <span class="px-2 bg-white text-gray-500">Or continue with</span>
+                    </div>
+                </div>
+
+                <!-- Social Registration Buttons -->
+                <div class="grid grid-cols-2 gap-3">
+                    <button
+                        type="button"
+                        class="flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+                    >
+                        <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24">
+                            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                        </svg>
+                        Google
+                    </button>
+                    <button
+                        type="button"
+                        class="flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+                    >
+                        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                        </svg>
+                        Facebook
+                    </button>
+                </div>
+
+                <!-- Sign In Link -->
+                <div class="text-center">
+                    <p class="text-sm text-gray-600">
+                        Already have an account?
+                        <a href="#" class="font-medium text-blue-600 hover:text-blue-700 hover:underline transition-colors">
+                            Sign in
+                        </a>
+                    </p>
+                </div>
+            </form>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center mt-8">
+            <p class="text-xs text-gray-500">
+                By creating an account, you agree to our
+                <a href="#" class="text-blue-600 hover:underline">Terms of Service</a>
+                and
+                <a href="#" class="text-blue-600 hover:underline">Privacy Policy</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Password visibility toggle
+        function togglePasswordVisibility() {
+            const passwordInput = document.getElementById('password');
+            const eyeIcon = document.getElementById('eyeIcon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeIcon.innerHTML = `
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"/>
+                `;
+            } else {
+                passwordInput.type = 'password';
+                eyeIcon.innerHTML = `
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                `;
+            }
+        }
+
+        function toggleConfirmPasswordVisibility() {
+            const confirmPasswordInput = document.getElementById('confirmPassword');
+            const eyeIconConfirm = document.getElementById('eyeIconConfirm');
+            
+            if (confirmPasswordInput.type === 'password') {
+                confirmPasswordInput.type = 'text';
+                eyeIconConfirm.innerHTML = `
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"/>
+                `;
+            } else {
+                confirmPasswordInput.type = 'password';
+                eyeIconConfirm.innerHTML = `
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                `;
+            }
+        }
+
+        // Password strength checker
+        function checkPasswordStrength(password) {
+            const strengthBar = document.getElementById('passwordStrengthBar');
+            const strengthContainer = document.getElementById('passwordStrength');
+            const requirements = {
+                length: password.length >= 8,
+                uppercase: /[A-Z]/.test(password),
+                lowercase: /[a-z]/.test(password),
+                number: /\d/.test(password),
+                special: /[!@#$%^&*(),.?":{}|<>]/.test(password)
+            };
+
+            // Update requirement indicators
+            document.getElementById('reqLength').className = requirements.length ? 'text-green-600' : 'text-gray-500';
+            document.getElementById('reqUppercase').className = requirements.uppercase ? 'text-green-600' : 'text-gray-500';
+            document.getElementById('reqLowercase').className = requirements.lowercase ? 'text-green-600' : 'text-gray-500';
+            document.getElementById('reqNumber').className = requirements.number ? 'text-green-600' : 'text-gray-500';
+            document.getElementById('reqSpecial').className = requirements.special ? 'text-green-600' : 'text-gray-500';
+
+            // Calculate strength
+            const strengthCount = Object.values(requirements).filter(Boolean).length;
+            strengthContainer.classList.remove('hidden');
+            
+            strengthBar.className = 'password-strength-bar';
+            if (strengthCount <= 2) {
+                strengthBar.classList.add('strength-weak');
+            } else if (strengthCount <= 3) {
+                strengthBar.classList.add('strength-fair');
+            } else if (strengthCount <= 4) {
+                strengthBar.classList.add('strength-good');
+            } else {
+                strengthBar.classList.add('strength-strong');
+            }
+
+            return strengthCount >= 4;
+        }
+
+        // Password strength monitoring
+        document.getElementById('password').addEventListener('input', function() {
+            checkPasswordStrength(this.value);
+        });
+
+        // Form validation and submission
+        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                email: document.getElementById('email').value,
+                contactNumber: document.getElementById('contactNumber').value,
+                address: document.getElementById('address').value,
+                password: document.getElementById('password').value,
+                confirmPassword: document.getElementById('confirmPassword').value,
+                terms: document.getElementById('terms').checked
+            };
+            
+            // Clear previous errors
+            document.querySelectorAll('[id$="Error"]').forEach(error => {
+                error.classList.add('hidden');
+            });
+            document.querySelectorAll('.form-input').forEach(input => {
+                input.classList.remove('error');
+            });
+            
+            let hasErrors = false;
+            
+            // Validate first name
+            if (!formData.firstName.trim()) {
+                document.getElementById('firstNameError').textContent = 'First name is required';
+                document.getElementById('firstNameError').classList.remove('hidden');
+                document.getElementById('firstName').classList.add('error');
+                hasErrors = true;
+            }
+            
+            // Validate last name
+            if (!formData.lastName.trim()) {
+                document.getElementById('lastNameError').textContent = 'Last name is required';
+                document.getElementById('lastNameError').classList.remove('hidden');
+                document.getElementById('lastName').classList.add('error');
+                hasErrors = true;
+            }
+            
+            // Validate email
+            if (!formData.email) {
+                document.getElementById('emailError').textContent = 'Email is required';
+                document.getElementById('emailError').classList.remove('hidden');
+                document.getElementById('email').classList.add('error');
+                hasErrors = true;
+            } else {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(formData.email)) {
+                    document.getElementById('emailError').textContent = 'Please enter a valid email address';
+                    document.getElementById('emailError').classList.remove('hidden');
+                    document.getElementById('email').classList.add('error');
+                    hasErrors = true;
+                }
+            }
+            
+            // Validate contact number
+            if (!formData.contactNumber.trim()) {
+                document.getElementById('contactNumberError').textContent = 'Contact number is required';
+                document.getElementById('contactNumberError').classList.remove('hidden');
+                document.getElementById('contactNumber').classList.add('error');
+                hasErrors = true;
+            }
+            
+            // Validate address
+            if (!formData.address.trim()) {
+                document.getElementById('addressError').textContent = 'Address is required';
+                document.getElementById('addressError').classList.remove('hidden');
+                document.getElementById('address').classList.add('error');
+                hasErrors = true;
+            }
+            
+            // Validate password
+            if (!formData.password) {
+                document.getElementById('passwordError').textContent = 'Password is required';
+                document.getElementById('passwordError').classList.remove('hidden');
+                document.getElementById('password').classList.add('error');
+                hasErrors = true;
+            } else if (!checkPasswordStrength(formData.password)) {
+                document.getElementById('passwordError').textContent = 'Password does not meet strength requirements';
+                document.getElementById('passwordError').classList.remove('hidden');
+                document.getElementById('password').classList.add('error');
+                hasErrors = true;
+            }
+            
+            // Validate confirm password
+            if (!formData.confirmPassword) {
+                document.getElementById('confirmPasswordError').textContent = 'Please confirm your password';
+                document.getElementById('confirmPasswordError').classList.remove('hidden');
+                document.getElementById('confirmPassword').classList.add('error');
+                hasErrors = true;
+            } else if (formData.password !== formData.confirmPassword) {
+                document.getElementById('confirmPasswordError').textContent = 'Passwords do not match';
+                document.getElementById('confirmPasswordError').classList.remove('hidden');
+                document.getElementById('confirmPassword').classList.add('error');
+                hasErrors = true;
+            }
+            
+            // Validate terms
+            if (!formData.terms) {
+                document.getElementById('termsError').textContent = 'You must agree to the terms and conditions';
+                document.getElementById('termsError').classList.remove('hidden');
+                hasErrors = true;
+            }
+            
+            if (hasErrors) return;
+            
+            // Simulate registration process
+            const registerButton = document.getElementById('registerButton');
+            const buttonText = document.getElementById('buttonText');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            
+            registerButton.disabled = true;
+            buttonText.textContent = 'Creating Account...';
+            loadingSpinner.classList.remove('hidden');
+            
+            setTimeout(() => {
+                // Simulate success
+                registerButton.disabled = false;
+                buttonText.textContent = 'Create Account';
+                loadingSpinner.classList.add('hidden');
+                
+                // Show success message (in real app, redirect would happen here)
+                alert('Account created successfully! Please check your email for verification. (This is a mockup)');
+            }, 2000);
+        });
+
+        // Social registration buttons
+        document.querySelectorAll('button[type="button"]').forEach(button => {
+            if (button.textContent.includes('Google') || button.textContent.includes('Facebook')) {
+                button.addEventListener('click', function() {
+                    alert(`${this.textContent.trim()} registration would be implemented here!`);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
