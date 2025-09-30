@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Question Generator Form Mockup</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="navbar-component.js"></script>
     <style>
         * {
             margin: 0;
@@ -368,6 +370,12 @@
     </style>
 </head>
 <body>
+    
+    <!-- Navbar will be loaded here -->
+    <div id="navbar-container"></div>
+    
+    <!-- Main Content with top padding for navigation -->
+    <div class="pt-16">
     <div class="modal-overlay">
         <div class="modal-content">
             <div class="modal-body">
@@ -655,7 +663,7 @@
                         </div>
                     </div>
 
-                    <button class="generate-btn">
+                    <button class="generate-btn" onclick="window.location.href = './question-sets-details-not-started.html'">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <line x1="22" y1="2" x2="11" y2="13"></line>
                             <polygon points="22,2 15,22 11,13 2,9 22,2"></polygon>
@@ -759,5 +767,6 @@
             });
         });
     </script>
+    </div> <!-- Close main content div -->
 </body>
 </html>

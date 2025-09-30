@@ -8,6 +8,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="navbar-component.js"></script>
     <style>
         .gradient-bg {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -70,6 +71,12 @@
     </style>
 </head>
 <body class="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
+    
+    <!-- Navbar will be loaded here -->
+    <div id="navbar-container"></div>
+    
+    <!-- Main Content with top padding for navigation -->
+    <div class="pt-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <!-- Header Section -->
         <div class="relative bg-white/90 backdrop-blur-xl rounded-2xl overflow-hidden border border-gray-100 shadow-lg transition-all duration-300 hover:shadow-xl mb-8">
@@ -95,7 +102,9 @@
                         </div>
                     </div>
                     <div class="flex space-x-3 shrink-0">
-                        <button class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-gradient-to-r from-green-600 to-green-600 hover:from-green-700 hover:to-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        <button 
+                          onclick="window.location.href = './question-sets.html'"
+                          class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-gradient-to-r from-green-600 to-green-600 hover:from-green-700 hover:to-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                             Submit Test
                         </button>
                     </div>
@@ -558,7 +567,9 @@ export default TodoList;</code></pre>
 
                 <!-- Submit Test Button Section -->
                 <div class="mt-8 flex flex-col sm:flex-row justify-center gap-4">
-                    <button class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gradient-to-r from-green-600 to-green-600 hover:from-green-700 hover:to-green-700 shadow-sm">
+                    <button 
+                      onclick="window.location.href = './question-sets.html'"
+                      class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gradient-to-r from-green-600 to-green-600 hover:from-green-700 hover:to-green-700 shadow-sm">
                         Submit Test
                     </button>
                 </div>
@@ -603,5 +614,6 @@ export default TodoList;</code></pre>
             });
         });
     </script>
+    </div> <!-- Close main content div -->
 </body>
 </html>

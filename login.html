@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Feedback AI</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="navbar-component.js"></script>
     <style>
         .gradient-bg {
             background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #e0f2fe 100%);
@@ -84,7 +85,13 @@
         }
     </style>
 </head>
-<body class="min-h-screen gradient-bg flex items-center justify-center p-4">
+<body class="min-h-screen gradient-bg">
+    
+    <!-- Navbar will be loaded here -->
+    <div id="navbar-container"></div>
+    
+    <!-- Main Content with top padding for navigation -->
+    <div class="pt-32 flex items-center justify-center p-4 min-h-screen">
     <div class="w-full max-w-md">
         <!-- Logo and Header -->
         <div class="text-center mb-8">
@@ -115,7 +122,6 @@
                             name="email"
                             class="form-input w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
                             placeholder="Enter your email address"
-                            required
                         />
                     </div>
                     <div id="emailError" class="mt-1 text-sm text-red-600 hidden"></div>
@@ -136,7 +142,6 @@
                             name="password"
                             class="form-input w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
                             placeholder="Enter your password"
-                            required
                         />
                         <button
                             type="button"
@@ -168,7 +173,7 @@
                 <button
                     type="submit"
                     id="loginButton"
-                    class="login-button w-full py-3 px-4 text-white font-medium rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all"
+                    class="flex justify-center login-button w-full py-3 px-4 text-white font-medium rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all"
                 >
                     <span id="buttonText">Sign In</span>
                     <div id="loadingSpinner" class="loading-spinner hidden"></div>
@@ -213,7 +218,7 @@
                 <div class="text-center">
                     <p class="text-sm text-gray-600">
                         Don't have an account?
-                        <a href="#" class="font-medium text-blue-600 hover:text-blue-700 hover:underline transition-colors">
+                        <a href="./registration.html" class="font-medium text-blue-600 hover:text-blue-700 hover:underline transition-colors">
                             Sign up
                         </a>
                     </p>
@@ -233,66 +238,14 @@
     </div>
 
     <script>
-        // Password visibility toggle
-        function togglePasswordVisibility() {
-            const passwordInput = document.getElementById('password');
-            const eyeIcon = document.getElementById('eyeIcon');
-            
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                eyeIcon.innerHTML = `
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"/>
-                `;
-            } else {
-                passwordInput.type = 'password';
-                eyeIcon.innerHTML = `
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                `;
-            }
-        }
 
         // Form validation and submission
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const emailError = document.getElementById('emailError');
-            const passwordError = document.getElementById('passwordError');
             const loginButton = document.getElementById('loginButton');
             const buttonText = document.getElementById('buttonText');
             const loadingSpinner = document.getElementById('loadingSpinner');
-            
-            // Clear previous errors
-            emailError.classList.add('hidden');
-            passwordError.classList.add('hidden');
-            document.getElementById('email').classList.remove('error');
-            document.getElementById('password').classList.remove('error');
-            
-            // Validate email
-            if (!email) {
-                emailError.textContent = 'Email is required';
-                emailError.classList.remove('hidden');
-                document.getElementById('email').classList.add('error');
-                return;
-            }
-            
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                emailError.textContent = 'Please enter a valid email address';
-                emailError.classList.remove('hidden');
-                document.getElementById('email').classList.add('error');
-                return;
-            }
-            
-            // Validate password
-            if (!password) {
-                passwordError.textContent = 'Password is required';
-                passwordError.classList.remove('hidden');
-                document.getElementById('password').classList.add('error');
-                return;
-            }
             
             // Simulate login process
             loginButton.disabled = true;
@@ -306,7 +259,7 @@
                 loadingSpinner.classList.add('hidden');
                 
                 // Show success message (in real app, redirect would happen here)
-                alert('Login successful! (This is a mockup)');
+                window.location.href = './question-sets.html';
             }, 2000);
         });
 
@@ -323,6 +276,8 @@
                 });
             }
         });
+
     </script>
+    </div> <!-- Close main content div -->
 </body>
 </html>

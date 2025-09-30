@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Organization Settings - Mockup</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="navbar-component.js"></script>
     <style>
         .gradient-bg {
             background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #e0f2fe 100%);
@@ -126,6 +127,12 @@
     </style>
 </head>
 <body class="min-h-screen gradient-bg">
+    
+    <!-- Navbar will be loaded here -->
+    <div id="navbar-container"></div>
+    
+    <!-- Main Content with top padding for navigation -->
+    <div class="pt-16">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <!-- Header -->
         <div class="flex items-center justify-between mb-8">
@@ -617,5 +624,6 @@
             });
         });
     </script>
+    </div> <!-- Close main content div -->
 </body>
 </html>
