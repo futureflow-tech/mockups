@@ -103,7 +103,7 @@ class NavbarComponent {
                         <div class="flex items-center space-x-8">
                             <!-- Logo -->
                             <div class="flex-shrink-0 flex items-center">
-                                <a href="${isAuth ? './login.html' : './question-sets.html'}" class="flex items-center group">
+                                <a href="${isAuth ? './home.html' : './question-sets.html'}" class="flex items-center group">
                                     <div class="relative flex items-center justify-center h-10 w-10 mr-3 overflow-hidden rounded-md transition-transform duration-300 group-hover:scale-105">
                                         <img src="./logo.svg" alt="Feedback AI Logo" class="w-full h-full object-contain" />
                                     </div>
