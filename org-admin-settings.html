@@ -18,6 +18,7 @@
         .plan-card:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border-color: #3b82f6;
         }
         
         .current-plan {
@@ -33,7 +34,6 @@
             left: -2px;
             right: -2px;
             bottom: -2px;
-            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
             border-radius: 12px;
             z-index: -1;
         }
@@ -124,6 +124,35 @@
             transform: none;
             box-shadow: none;
         }
+        
+        .pricing-toggle-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .savings-indicator {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #059669;
+        }
+        
+        .yearly-pricing {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        
+        .original-price {
+            text-decoration: line-through;
+            color: #6b7280;
+        }
+        
+        .discounted-price {
+            color: #059669;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body class="min-h-screen gradient-bg">
@@ -154,8 +183,8 @@
         </div>
 
         <!-- Success Message -->
-        <div class="mb-6 p-4 bg-green-50 border border-green-200 rounded-md">
-            <p class="text-green-800">Organization profile saved successfully!</p>
+        <div class="mb-6 p-4 bg-green-50 border border-green-200 rounded-md" style="display: none;">
+            <p class="text-center text-green-800">Organization profile saved successfully!</p>
         </div>
 
         <div class="space-y-8">
@@ -186,18 +215,6 @@
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">
-                            Admin Email *
-                        </label>
-                        <input
-                            type="email"
-                            value="admin@techcorp.com"
-                            class="form-input w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            placeholder="admin@company.com"
-                        />
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">
                             Support Email
                         </label>
                         <input
@@ -209,18 +226,6 @@
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                            Website
-                        </label>
-                        <input
-                            type="url"
-                            value="https://techcorp.com"
-                            class="form-input w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            placeholder="https://company.com"
-                        />
-                    </div>
-
-                    <div class="md:col-span-2">
                         <label class="block text-sm font-medium text-gray-700 mb-2">
                             Logo URL
                         </label>
@@ -241,294 +246,17 @@
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">
-                            Subscription Tier
+                            Website
                         </label>
-                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                            <option value="basic">Basic Plan</option>
-                            <option value="premium" selected>Premium Plan</option>
-                            <option value="enterprise">Enterprise Plan</option>
-                        </select>
+                        <input
+                            type="url"
+                            value="https://techcorp.com"
+                            class="form-input w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            placeholder="https://company.com"
+                        />
                     </div>
                 </div>
             </form>
-
-            <!-- Current Subscription Status -->
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                <h2 class="text-xl font-semibold text-gray-900 mb-4">Current Subscription</h2>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                    <div class="flex items-center space-x-3">
-                        <svg class="h-8 w-8 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                        <div>
-                            <p class="text-sm text-gray-600">Plan</p>
-                            <p class="font-medium text-gray-900">Premium Plan</p>
-                        </div>
-                    </div>
-
-                    <div class="flex items-center space-x-3">
-                        <svg class="h-8 w-8 text-green-600" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 8c-1.657 0-3 1.343-3 3s1.343 3 3 3 3-1.343 3-3-1.343-3-3-3zm0 8c-4.418 0-8-3.582-8-8s3.582-8 8-8 8 3.582 8 8-3.582 8-8 8z"/>
-                        </svg>
-                        <div>
-                            <p class="text-sm text-gray-600">Amount</p>
-                            <p class="font-medium text-gray-900">$99/month</p>
-                        </div>
-                    </div>
-
-                    <div class="flex items-center space-x-3">
-                        <svg class="h-8 w-8 text-purple-600" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                        </svg>
-                        <div>
-                            <p class="text-sm text-gray-600">Next Billing</p>
-                            <p class="font-medium text-gray-900">2024-09-30</p>
-                        </div>
-                    </div>
-
-                    <div class="flex items-center space-x-3">
-                        <svg class="h-8 w-8 text-orange-600" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                        <div>
-                            <p class="text-sm text-gray-600">Status</p>
-                            <span class="status-badge status-active">Active</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Billing Cycle Toggle -->
-                <div class="flex items-center justify-between p-4 billing-toggle rounded-lg">
-                    <span class="text-sm font-medium text-gray-900">Billing Cycle</span>
-                    <div class="flex items-center space-x-3">
-                        <button class="toggle-button px-3 py-1.5 text-sm font-medium rounded transition-colors">
-                            Monthly
-                        </button>
-                        <button class="toggle-button active px-3 py-1.5 text-sm font-medium rounded transition-colors">
-                            Yearly
-                            <span class="ml-1 text-xs text-green-600">Save 17%</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Plan Comparison -->
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                <h2 class="text-xl font-semibold text-gray-900 mb-6">Change Plan</h2>
-                
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <!-- Basic Plan -->
-                    <div class="plan-card relative border-2 border-gray-200 rounded-lg p-6">
-                        <div class="text-center mb-6">
-                            <h3 class="text-lg font-semibold text-gray-900 mb-2">Basic Plan</h3>
-                            <div class="flex items-baseline justify-center mb-1">
-                                <span class="text-3xl font-bold text-gray-900">$29</span>
-                                <span class="text-gray-600 ml-1">/year</span>
-                            </div>
-                        </div>
-
-                        <ul class="space-y-3 mb-6">
-                            <li class="flex items-start">
-                                <svg class="h-5 w-5 feature-check mt-0.5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                                <span class="text-sm text-gray-700">Up to 10 interviewers</span>
-                            </li>
-                            <li class="flex items-start">
-                                <svg class="h-5 w-5 feature-check mt-0.5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                                <span class="text-sm text-gray-700">Up to 50 candidates per month</span>
-                            </li>
-                            <li class="flex items-start">
-                                <svg class="h-5 w-5 feature-check mt-0.5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                                <span class="text-sm text-gray-700">Basic question sets</span>
-                            </li>
-                            <li class="flex items-start">
-                                <svg class="h-5 w-5 feature-check mt-0.5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                                <span class="text-sm text-gray-700">Standard support</span>
-                            </li>
-                            <li class="flex items-start">
-                                <svg class="h-5 w-5 feature-check mt-0.5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                                <span class="text-sm text-gray-700">Basic analytics</span>
-                            </li>
-                        </ul>
-
-                        <button class="w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors">
-                            Upgrade to Basic Plan
-                        </button>
-                    </div>
-
-                    <!-- Premium Plan (Current) -->
-                    <div class="plan-card current-plan relative border-2 rounded-lg p-6">
-                        <div class="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-500 text-white">
-                                Current Plan
-                            </span>
-                        </div>
-
-                        <div class="text-center mb-6">
-                            <h3 class="text-lg font-semibold text-gray-900 mb-2">Premium Plan</h3>
-                            <div class="flex items-baseline justify-center mb-1">
-                                <span class="text-3xl font-bold text-gray-900">$990</span>
-                                <span class="text-gray-600 ml-1">/year</span>
-                            </div>
-                            <div class="inline-flex items-center text-green-600 text-sm">
-                                <svg class="h-4 w-4 mr-1 rotate-180" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M7 14l5-5 5 5z"/>
-                                </svg>
-                                Save 17% annually
-                            </div>
-                        </div>
-
-                        <ul class="space-y-3 mb-6">
-                            <li class="flex items-start">
-                                <svg class="h-5 w-5 feature-check mt-0.5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                                <span class="text-sm text-gray-700">Up to 50 interviewers</span>
-                            </li>
-                            <li class="flex items-start">
-                                <svg class="h-5 w-5 feature-check mt-0.5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                                <span class="text-sm text-gray-700">Unlimited candidates</span>
-                            </li>
-                            <li class="flex items-start">
-                                <svg class="h-5 w-5 feature-check mt-0.5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                                <span class="text-sm text-gray-700">Advanced question sets</span>
-                            </li>
-                            <li class="flex items-start">
-                                <svg class="h-5 w-5 feature-check mt-0.5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                                <span class="text-sm text-gray-700">Priority support</span>
-                            </li>
-                            <li class="flex items-start">
-                                <svg class="h-5 w-5 feature-check mt-0.5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                                <span class="text-sm text-gray-700">Advanced analytics</span>
-                            </li>
-                            <li class="flex items-start">
-                                <svg class="h-5 w-5 feature-check mt-0.5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                                <span class="text-sm text-gray-700">Custom branding</span>
-                            </li>
-                            <li class="flex items-start">
-                                <svg class="h-5 w-5 feature-check mt-0.5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                                <span class="text-sm text-gray-700">API access</span>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <!-- Enterprise Plan -->
-                    <div class="plan-card relative border-2 border-gray-200 rounded-lg p-6">
-                        <div class="text-center mb-6">
-                            <h3 class="text-lg font-semibold text-gray-900 mb-2">Enterprise Plan</h3>
-                            <div class="flex items-baseline justify-center mb-1">
-                                <span class="text-3xl font-bold text-gray-900">$2,990</span>
-                                <span class="text-gray-600 ml-1">/year</span>
-                            </div>
-                            <div class="inline-flex items-center text-green-600 text-sm">
-                                <svg class="h-4 w-4 mr-1 rotate-180" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M7 14l5-5 5 5z"/>
-                                </svg>
-                                Save 17% annually
-                            </div>
-                        </div>
-
-                        <ul class="space-y-3 mb-6">
-                            <li class="flex items-start">
-                                <svg class="h-5 w-5 feature-check mt-0.5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                                <span class="text-sm text-gray-700">Unlimited interviewers</span>
-                            </li>
-                            <li class="flex items-start">
-                                <svg class="h-5 w-5 feature-check mt-0.5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                                <span class="text-sm text-gray-700">Unlimited candidates</span>
-                            </li>
-                            <li class="flex items-start">
-                                <svg class="h-5 w-5 feature-check mt-0.5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                                <span class="text-sm text-gray-700">Custom question sets</span>
-                            </li>
-                            <li class="flex items-start">
-                                <svg class="h-5 w-5 feature-check mt-0.5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                                <span class="text-sm text-gray-700">24/7 dedicated support</span>
-                            </li>
-                            <li class="flex items-start">
-                                <svg class="h-5 w-5 feature-check mt-0.5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                                <span class="text-sm text-gray-700">Advanced analytics & reporting</span>
-                            </li>
-                            <li class="flex items-start">
-                                <svg class="h-5 w-5 feature-check mt-0.5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                                <span class="text-sm text-gray-700">Full white-label branding</span>
-                            </li>
-                            <li class="flex items-start">
-                                <svg class="h-5 w-5 feature-check mt-0.5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                                <span class="text-sm text-gray-700">Full API access</span>
-                            </li>
-                            <li class="flex items-start">
-                                <svg class="h-5 w-5 feature-check mt-0.5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                                <span class="text-sm text-gray-700">SSO integration</span>
-                            </li>
-                            <li class="flex items-start">
-                                <svg class="h-5 w-5 feature-check mt-0.5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                                <span class="text-sm text-gray-700">Custom integrations</span>
-                            </li>
-                        </ul>
-
-                        <button class="w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors">
-                            Upgrade to Enterprise Plan
-                        </button>
-                    </div>
-                </div>
-
-                <div class="mt-8 p-4 bg-blue-50 rounded-lg">
-                    <div class="flex items-start space-x-3">
-                        <svg class="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
-                        </svg>
-                        <div>
-                            <p class="text-sm font-medium text-blue-900 mb-1">
-                                Billing Information
-                            </p>
-                            <p class="text-sm text-blue-700">
-                                Plan changes take effect immediately. You'll be charged a prorated amount for the remainder of your billing period.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <!-- Current Usage -->
             <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
@@ -563,26 +291,333 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Plan Comparison -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-xl font-semibold text-gray-900">Choose Plan</h2>
+                    
+                    <!-- Pricing Toggle -->
+                    <div class="flex items-center space-x-4">
+                        <div class="billing-toggle inline-flex rounded-lg p-1 border border-gray-200">
+                            <button class="toggle-button active px-4 py-2 text-sm font-medium rounded-md transition-all" data-billing="monthly">
+                                Monthly
+                            </button>
+                            <button class="toggle-button px-4 py-2 text-sm font-medium rounded-md transition-all" data-billing="yearly">
+                                Yearly
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Basic Plan -->
+                    <div class="plan-card relative border-2 border-gray-200 rounded-lg p-6 flex flex-col">
+                        <div class="text-center mb-6">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-2">Basic Plan</h3>
+                            <div class="flex items-baseline justify-center mb-1">
+                                <span class="text-3xl font-bold text-gray-900" id="basic-price">$3</span>
+                                <span class="text-gray-600 ml-1" id="basic-period">/month</span>
+                            </div>
+                            <div class="yearly-pricing" id="basic-yearly-price" style="display: none;">
+                                <span class="original-price">$36/year</span>
+                                <span class="discounted-price">$29/year</span>
+                            </div>
+                        </div>
+
+                        <ul class="space-y-3 mb-6 flex-grow">
+                            <li class="flex items-start">
+                                <svg class="h-5 w-5 feature-check mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <span class="text-sm text-gray-700">Up to 10 interviewers</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="h-5 w-5 feature-check mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <span class="text-sm text-gray-700">Up to 50 candidates per month</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="h-5 w-5 feature-check mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <span class="text-sm text-gray-700">Basic question sets</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="h-5 w-5 feature-check mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <span class="text-sm text-gray-700">Standard support</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="h-5 w-5 feature-check mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <span class="text-sm text-gray-700">Basic analytics</span>
+                            </li>
+                        </ul>
+
+                        <button class="w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors">
+                            Upgrade to Basic Plan
+                        </button>
+                    </div>
+
+                    <!-- Premium Plan (Current) -->
+                    <div class="plan-card current-plan relative border-2 rounded-lg p-6 flex flex-col">
+                        <div class="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-500 text-white">
+                                Current Plan
+                            </span>
+                        </div>
+
+                        <div class="text-center mb-6">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-2">Premium Plan</h3>
+                            <div class="flex items-baseline justify-center mb-1">
+                                <span class="text-3xl font-bold text-gray-900" id="premium-price">$99</span>
+                                <span class="text-gray-600 ml-1" id="premium-period">/month</span>
+                            </div>
+                            <div class="yearly-pricing" id="premium-yearly-price" style="display: none;">
+                                <span class="original-price">$1,188/year</span>
+                                <span class="discounted-price">$990/year</span>
+                            </div>
+                            <div class="inline-flex items-center text-green-600 text-sm" id="premium-savings">
+                                <svg class="h-4 w-4 mr-1 rotate-180" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M7 14l5-5 5 5z"/>
+                                </svg>
+                                Save 17% annually
+                            </div>
+                        </div>
+
+                        <ul class="space-y-3 mb-6 flex-grow">
+                            <li class="flex items-start">
+                                <svg class="h-5 w-5 feature-check mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <span class="text-sm text-gray-700">Up to 50 interviewers</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="h-5 w-5 feature-check mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <span class="text-sm text-gray-700">Unlimited candidates</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="h-5 w-5 feature-check mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <span class="text-sm text-gray-700">Advanced question sets</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="h-5 w-5 feature-check mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <span class="text-sm text-gray-700">Priority support</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="h-5 w-5 feature-check mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <span class="text-sm text-gray-700">Advanced analytics</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="h-5 w-5 feature-check mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <span class="text-sm text-gray-700">Custom branding</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="h-5 w-5 feature-check mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <span class="text-sm text-gray-700">API access</span>
+                            </li>
+                        </ul>
+
+                        <button class="w-full px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors cursor-not-allowed" disabled>
+                            Current Plan
+                        </button>
+                    </div>
+
+                    <!-- Enterprise Plan -->
+                    <div class="plan-card relative border-2 border-gray-200 rounded-lg p-6 flex flex-col">
+                        <div class="text-center mb-6">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-2">Enterprise Plan</h3>
+                            <div class="flex items-baseline justify-center mb-1">
+                                <span class="text-3xl font-bold text-gray-900" id="enterprise-price">$299</span>
+                                <span class="text-gray-600 ml-1" id="enterprise-period">/month</span>
+                            </div>
+                            <div class="yearly-pricing" id="enterprise-yearly-price" style="display: none;">
+                                <span class="original-price">$3,588/year</span>
+                                <span class="discounted-price">$2,990/year</span>
+                            </div>
+                            <div class="inline-flex items-center text-green-600 text-sm" id="enterprise-savings">
+                                <svg class="h-4 w-4 mr-1 rotate-180" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M7 14l5-5 5 5z"/>
+                                </svg>
+                                Save 17% annually
+                            </div>
+                        </div>
+
+                        <ul class="space-y-3 mb-6 flex-grow">
+                            <li class="flex items-start">
+                                <svg class="h-5 w-5 feature-check mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <span class="text-sm text-gray-700">Unlimited interviewers</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="h-5 w-5 feature-check mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <span class="text-sm text-gray-700">Unlimited candidates</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="h-5 w-5 feature-check mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <span class="text-sm text-gray-700">Custom question sets</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="h-5 w-5 feature-check mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <span class="text-sm text-gray-700">24/7 dedicated support</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="h-5 w-5 feature-check mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <span class="text-sm text-gray-700">Advanced analytics & reporting</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="h-5 w-5 feature-check mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <span class="text-sm text-gray-700">Full white-label branding</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="h-5 w-5 feature-check mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <span class="text-sm text-gray-700">Full API access</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="h-5 w-5 feature-check mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <span class="text-sm text-gray-700">SSO integration</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="h-5 w-5 feature-check mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <span class="text-sm text-gray-700">Custom integrations</span>
+                            </li>
+                        </ul>
+
+                        <button class="w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors">
+                            Upgrade to Enterprise Plan
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
         // Simple JavaScript for interactive elements
         document.addEventListener('DOMContentLoaded', function() {
+            // Pricing data
+            const pricingData = {
+                basic: { monthly: 3, yearly: 29 },
+                premium: { monthly: 99, yearly: 990 },
+                enterprise: { monthly: 299, yearly: 2990 }
+            };
+
             // Billing cycle toggle functionality
             const toggleButtons = document.querySelectorAll('.toggle-button');
+            const savingsText = document.getElementById('savings-text');
+            
             toggleButtons.forEach(button => {
                 button.addEventListener('click', function() {
                     // Remove active class from all buttons
                     toggleButtons.forEach(btn => btn.classList.remove('active'));
                     // Add active class to clicked button
                     this.classList.add('active');
+                    
+                    const billingCycle = this.getAttribute('data-billing');
+                    updatePricing(billingCycle);
                 });
             });
+
+            function updatePricing(billingCycle) {
+                // Update Basic Plan
+                const basicPrice = document.getElementById('basic-price');
+                const basicPeriod = document.getElementById('basic-period');
+                const basicYearlyPrice = document.getElementById('basic-yearly-price');
+                
+                if (billingCycle === 'monthly') {
+                    basicPrice.textContent = `$${pricingData.basic.monthly}`;
+                    basicPeriod.textContent = '/month';
+                    basicYearlyPrice.style.display = 'none';
+                } else {
+                    basicPrice.textContent = `$${pricingData.basic.yearly}`;
+                    basicPeriod.textContent = '/year';
+                    basicYearlyPrice.style.display = 'block';
+                }
+
+                // Update Premium Plan
+                const premiumPrice = document.getElementById('premium-price');
+                const premiumPeriod = document.getElementById('premium-period');
+                const premiumYearlyPrice = document.getElementById('premium-yearly-price');
+                const premiumSavings = document.getElementById('premium-savings');
+                
+                if (billingCycle === 'monthly') {
+                    premiumPrice.textContent = `$${pricingData.premium.monthly}`;
+                    premiumPeriod.textContent = '/month';
+                    premiumYearlyPrice.style.display = 'none';
+                    premiumSavings.style.display = 'none';
+                } else {
+                    premiumPrice.textContent = `$${pricingData.premium.yearly}`;
+                    premiumPeriod.textContent = '/year';
+                    premiumYearlyPrice.style.display = 'block';
+                    premiumSavings.style.display = 'inline-flex';
+                }
+
+                // Update Enterprise Plan
+                const enterprisePrice = document.getElementById('enterprise-price');
+                const enterprisePeriod = document.getElementById('enterprise-period');
+                const enterpriseYearlyPrice = document.getElementById('enterprise-yearly-price');
+                const enterpriseSavings = document.getElementById('enterprise-savings');
+                
+                if (billingCycle === 'monthly') {
+                    enterprisePrice.textContent = `$${pricingData.enterprise.monthly}`;
+                    enterprisePeriod.textContent = '/month';
+                    enterpriseYearlyPrice.style.display = 'none';
+                    enterpriseSavings.style.display = 'none';
+                } else {
+                    enterprisePrice.textContent = `$${pricingData.enterprise.yearly}`;
+                    enterprisePeriod.textContent = '/year';
+                    enterpriseYearlyPrice.style.display = 'block';
+                    enterpriseSavings.style.display = 'inline-flex';
+                }
+
+                // Update savings text
+                if (billingCycle === 'monthly') {
+                    savingsText.textContent = 'Save 17% with yearly billing';
+                } else {
+                    savingsText.textContent = 'You\'re saving 17% with yearly billing!';
+                }
+            }
 
             // Form submission
             const form = document.querySelector('form');
             const saveButton = document.querySelector('.save-button');
+            const successMessage = document.querySelector('.bg-green-50');
+            
+            // Initially hide the success message
+            successMessage.style.display = 'none';
             
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
@@ -605,8 +640,7 @@
                         Save Profile
                     `;
                     
-                    // Show success message
-                    const successMessage = document.querySelector('.bg-green-50');
+                    // Show success message for 3 seconds
                     successMessage.style.display = 'block';
                     setTimeout(() => {
                         successMessage.style.display = 'none';

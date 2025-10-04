@@ -121,12 +121,14 @@
             <div class="inline-flex items-center justify-center w-16 h-16 rounded-xl mb-4">
                 <img src="./logo.svg" alt="Feedback AI Logo" class="w-full h-full object-contain" />
             </div>
-            <h1 class="text-2xl font-bold text-gray-900 mb-2">Verify Your Email</h1>
-            <p class="text-gray-600">We've sent a verification code to your email address</p>
+            <div id="otpFormHeader">
+                <h1 class="text-2xl font-bold text-gray-900 mb-2">Verify Your Email</h1>
+                <p class="text-gray-600">We've sent a verification code to your email address</p>
+            </div>
         </div>
 
         <!-- OTP Verification Form -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+        <div id="otpFormContainer" class="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
             <form id="otpForm" class="space-y-6">
                 <!-- Email Display -->
                 <div class="text-center p-4 bg-blue-50 rounded-lg">
@@ -199,7 +201,7 @@
 
         <!-- Success Message (Hidden by default) -->
         <div id="successMessage" class="hidden mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
-            <div class="flex items-center">
+            <div class="flex justify-center">
                 <svg class="w-5 h-5 text-green-600 mr-2" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
@@ -208,7 +210,7 @@
         </div>
 
         <!-- Footer -->
-        <div class="text-center mt-8">
+        <div id="otpFormFooter" class="text-center mt-8">
             <p class="text-xs text-gray-500">
                 Having trouble? Check your spam folder or
                 <a href="#" class="text-blue-600 hover:underline">contact support</a>
@@ -369,11 +371,13 @@
                 this.successMessage.classList.add('success-animation');
                 
                 // Hide form
-                document.querySelector('form').style.display = 'none';
-                
+                document.getElementById('otpFormContainer').style.display = 'none';
+                document.getElementById('otpFormHeader').style.display = 'none';
+                document.getElementById('otpFormFooter').style.display = 'none';
+
                 // Simulate redirect after 2 seconds
                 setTimeout(() => {
-                    window.location.href = './question-sets.html';
+                    window.location.href = './org-admin-settings.html';
                 }, 2000);
             }
             
