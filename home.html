@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FeedbackAI - Authentication</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="navbar-component.js"></script>
+    <style>
+        /* Tailwind already provides animate-spin and backdrop-blur utilities */
+    </style>
+</head>
+<body>
+    <!-- Navbar will be loaded here -->
+    <div id="navbar-container"></div>
+
+    <!-- Loading State (initially hidden) -->
+    <div id="loading" class="min-h-screen bg-gradient-to-br from-gray-50 via-gray-50 to-blue-50 flex items-center justify-center" style="display: none;">
+        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="main-content" class="bg-gradient-to-br from-gray-50 via-gray-50 to-blue-50">
+        <!-- Authentication Required Card -->
+        <div class="relative overflow-hidden bg-white/80 backdrop-blur-xl shadow-sm flex items-center min-h-screen">
+            <div class="absolute inset-0 overflow-hidden opacity-5 pointer-events-none">
+                <div class="absolute -right-32 -top-32 w-96 h-96 rounded-full bg-blue-400"></div>
+                <div class="absolute -left-32 -bottom-32 w-96 h-96 rounded-full bg-purple-400"></div>
+                <svg class="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                            <path d="M 0 10 L 40 10 M 10 0 L 10 40" fill="none" stroke="gray" stroke-width="0.5" stroke-opacity="0.1" />
+                        </pattern>
+                    </defs>
+                    <rect width="100%" height="100%" fill="url(#grid)" />
+                </svg>
+            </div>
+
+            <div class="relative mx-auto px-4 sm:px-6 lg:px-8 w-full">
+                <div class="text-center">
+                    <div class="flex justify-center mb-4">
+                        <div class="relative">
+                            <div class="absolute inset-0 bg-blue-400 rounded-full blur-xl opacity-20"></div>
+                            <div class="inline-flex items-center justify-center w-16 h-16 rounded-xl mb-4">
+                                <img src="./logo.svg" alt="Feedback AI Logo" class="w-full h-full object-contain" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <h1 class="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl md:text-5xl">
+                        <span class="flex items-center justify-center gap-3">
+                            <span class="block">Welcome to</span><span class="block text-blue-600">FeedbackAI</span>
+                        </span>
+                    </h1>
+
+                    <p class="max-w-2xl mx-auto mt-4 text-lg text-gray-600">
+                        Sign in to access the interview platform. Candidates can take assessments,
+                        while interviewers can create questions and evaluate performance.
+                    </p>
+
+                    <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-8">
+                        <div class="text-center">
+                            <div class="bg-white/50 backdrop-blur-sm rounded-xl p-4 border border-gray-200/50">
+                                <i class="fas fa-file-text h-6 w-6 text-blue-600 mx-auto mb-3" style="font-size: 1.5rem;"></i>
+                                <h4 class="text-base font-semibold text-gray-900 mb-2">For Candidates</h4>
+                                <p class="text-sm text-gray-600">
+                                    Take coding assessments, showcase your skills, and receive detailed AI-powered feedback.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="text-center">
+                            <div class="bg-white/50 backdrop-blur-sm rounded-xl p-4 border border-gray-200/50">
+                                <i class="fas fa-chart-bar h-6 w-6 text-blue-600 mx-auto mb-3" style="font-size: 1.5rem;"></i>
+                                <h4 class="text-base font-semibold text-gray-900 mb-2">For Interviewers</h4>
+                                <p class="text-sm text-gray-600">
+                                    Create interview questions, evaluate candidates, and access comprehensive performance reports.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="text-center">
+                            <div class="bg-white/50 backdrop-blur-sm rounded-xl p-4 border border-gray-200/50">
+                                <i class="fas fa-chart-line h-6 w-6 text-blue-600 mx-auto mb-3" style="font-size: 1.5rem;"></i>
+                                <h4 class="text-base font-semibold text-gray-900 mb-2">AI-Powered Insights</h4>
+                                <p class="text-sm text-gray-600">
+                                    Advanced AI evaluation provides detailed feedback and performance analytics for both sides.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        // Mock loading state toggle
+        function showLoading() {
+            document.getElementById('loading').style.display = 'flex';
+            document.getElementById('main-content').style.display = 'none';
+        }
+
+        function hideLoading() {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('main-content').style.display = 'block';
+        }
+
+        // Simulate authentication check
+        window.addEventListener('load', function() {
+            // Show loading for 1 second, then show main content
+            showLoading();
+            setTimeout(hideLoading, 200);
+        });
+    </script>
+</body>
+</html>

@@ -23,9 +23,6 @@ class NavbarComponent {
                 box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             }
             
-            .logo-gradient {
-                background: linear-gradient(135deg, #3b82f6 0%, #4f46e5 100%);
-            }
             
             .nav-link {
                 transition: all 0.2s ease;
@@ -69,10 +66,6 @@ class NavbarComponent {
                 opacity: 0;
             }
             
-            .user-avatar {
-                background: linear-gradient(135deg, #3b82f6 0%, #4f46e5 100%);
-                box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
-            }
             
             .notification-badge {
                 animation: pulse 2s infinite;
@@ -94,7 +87,7 @@ class NavbarComponent {
     // Check if current page is an authentication page
     isAuthPage() {
         const currentPage = window.location.pathname.split('/').pop();
-        const authPages = ['login.html', 'registration.html', 'otp-verification.html'];
+        const authPages = ['home.html','login.html', 'registration.html', 'otp-verification.html'];
         return authPages.includes(currentPage);
     }
 
@@ -111,10 +104,8 @@ class NavbarComponent {
                             <!-- Logo -->
                             <div class="flex-shrink-0 flex items-center">
                                 <a href="${isAuth ? './login.html' : './question-sets.html'}" class="flex items-center group">
-                                    <div class="relative flex items-center justify-center h-10 w-10 mr-3 overflow-hidden rounded-md logo-gradient transition-transform duration-300 group-hover:scale-105 shadow-lg">
-                                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                                        </svg>
+                                    <div class="relative flex items-center justify-center h-10 w-10 mr-3 overflow-hidden rounded-md transition-transform duration-300 group-hover:scale-105">
+                                        <img src="./logo.svg" alt="Feedback AI Logo" class="w-full h-full object-contain" />
                                     </div>
                                     <div class="flex flex-col">
                                         <div class="flex text-lg font-bold text-gray-900 leading-tight">
@@ -167,7 +158,10 @@ class NavbarComponent {
                         <!-- Right side: Login Button or User Menu -->
                         <div class="hidden md:flex items-center space-x-3">
                             ${isAuth ? `
-                            <!-- Login Button for auth pages -->
+                            <!-- Login and Register Buttons for auth pages -->
+                            <a href="./registration.html" class="border border-blue-600 text-blue-600 hover:bg-blue-50 px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                                Register
+                            </a>
                             <a href="./login.html" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                                 Login
                             </a>
@@ -175,8 +169,8 @@ class NavbarComponent {
                             <!-- User Menu for authenticated pages -->
                             <div class="relative" id="userMenuRef">
                                 <button onclick="navbarComponent.toggleUserMenu()" class="flex items-center space-x-2 focus:outline-none">
-                                    <div class="relative h-8 w-8 rounded-full user-avatar flex items-center justify-center text-white font-semibold border border-blue-400 shadow-sm">
-                                        J
+                                    <div class="relative h-8 w-8 rounded-full flex items-center justify-center border border-blue-600 shadow-sm overflow-hidden">
+                                        <img src="./user.jpg" alt="User Logo" class="w-8 h-8 object-contain" />
                                     </div>
                                     <div class="flex items-center">
                                         <span class="hidden lg:block text-sm font-medium text-gray-700">
@@ -267,8 +261,8 @@ class NavbarComponent {
                     <!-- Mobile User Menu -->
                     <div class="pt-4 pb-3 border-t border-gray-200">
                         <div class="flex items-center px-4 py-2">
-                            <div class="flex-shrink-0 h-10 w-10 rounded-full user-avatar flex items-center justify-center text-white font-semibold text-lg shadow-sm">
-                                J
+                            <div class="flex-shrink-0 h-10 w-10 rounded-full flex items-center justify-center shadow-sm overflow-hidden">
+                                <img src="./logo.svg" alt="Feedback AI Logo" class="w-full h-full object-contain" />
                             </div>
                             <div class="ml-3">
                                 <div class="text-base font-medium text-gray-800">
@@ -292,8 +286,11 @@ class NavbarComponent {
                         </div>
                     </div>
                     ` : `
-                    <!-- Mobile Login Button for auth pages -->
-                    <div class="px-4 py-4">
+                    <!-- Mobile Login and Register Buttons for auth pages -->
+                    <div class="px-4 py-4 space-y-3">
+                        <a href="./registration.html" class="block w-full border border-blue-600 text-blue-600 hover:bg-blue-50 px-4 py-3 rounded-md text-base font-medium text-center transition-colors duration-200">
+                            Register
+                        </a>
                         <a href="./login.html" class="block w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-md text-base font-medium text-center transition-colors duration-200">
                             Login
                         </a>
