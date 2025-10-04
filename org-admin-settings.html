@@ -19,6 +19,7 @@
             transform: translateY(-2px);
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
             border-color: #3b82f6;
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
         }
         
         .current-plan {
@@ -152,6 +153,66 @@
         .discounted-price {
             color: #059669;
             font-weight: 600;
+        }
+        
+        .modal-backdrop {
+            backdrop-filter: blur(4px);
+        }
+        
+        .modal-content {
+            animation: modalSlideIn 0.3s ease-out;
+        }
+        
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .payment-input:focus {
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            border-color: #3b82f6;
+        }
+        
+        .current-plan-selected {
+            border-color: #10b981 !important;
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            position: relative;
+        }
+        
+        .current-plan-selected::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border-radius: 12px;
+            z-index: -1;
+        }
+        
+        .current-plan-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 4px 16px;
+            border-radius: 9999px;
+            font-size: 12px;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+        
+        .current-plan-button {
+            background: linear-gradient(135deg, #10b981, #059669) !important;
+            color: white !important;
         }
     </style>
 </head>
@@ -312,7 +373,7 @@
                 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <!-- Basic Plan -->
-                    <div class="plan-card relative border-2 border-gray-200 rounded-lg p-6 flex flex-col">
+                    <div class="plan-card relative border-2 border-gray-200 rounded-lg p-6 flex flex-col" id="basic-plan-card">
                         <div class="text-center mb-6">
                             <h3 class="text-lg font-semibold text-gray-900 mb-2">Basic Plan</h3>
                             <div class="flex items-baseline justify-center mb-1">
@@ -358,18 +419,13 @@
                             </li>
                         </ul>
 
-                        <button class="w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors">
-                            Upgrade to Basic Plan
+                        <button class="w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors" data-plan="basic">
+                            Choose Basic Plan
                         </button>
                     </div>
 
-                    <!-- Premium Plan (Current) -->
-                    <div class="plan-card current-plan relative border-2 rounded-lg p-6 flex flex-col">
-                        <div class="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-500 text-white">
-                                Current Plan
-                            </span>
-                        </div>
+                    <!-- Premium Plan -->
+                    <div class="plan-card relative border-2 border-gray-200 rounded-lg p-6 flex flex-col" id="premium-plan-card">
 
                         <div class="text-center mb-6">
                             <h3 class="text-lg font-semibold text-gray-900 mb-2">Premium Plan</h3>
@@ -434,13 +490,13 @@
                             </li>
                         </ul>
 
-                        <button class="w-full px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors cursor-not-allowed" disabled>
-                            Current Plan
+                        <button class="w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors" data-plan="premium">
+                            Choose Premium Plan
                         </button>
                     </div>
 
                     <!-- Enterprise Plan -->
-                    <div class="plan-card relative border-2 border-gray-200 rounded-lg p-6 flex flex-col">
+                    <div class="plan-card relative border-2 border-gray-200 rounded-lg p-6 flex flex-col" id="enterprise-plan-card">
                         <div class="text-center mb-6">
                             <h3 class="text-lg font-semibold text-gray-900 mb-2">Enterprise Plan</h3>
                             <div class="flex items-baseline justify-center mb-1">
@@ -516,8 +572,8 @@
                             </li>
                         </ul>
 
-                        <button class="w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors">
-                            Upgrade to Enterprise Plan
+                        <button class="w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors" data-plan="enterprise">
+                            Choose Enterprise Plan
                         </button>
                     </div>
                 </div>
@@ -534,6 +590,77 @@
                 premium: { monthly: 99, yearly: 990 },
                 enterprise: { monthly: 299, yearly: 2990 }
             };
+
+            // Current plan state
+            let currentPlan = null;
+
+            // Function to update current plan display
+            function updateCurrentPlanDisplay(planType, billingCycle) {
+                const currentPlanSection = document.getElementById('current-plan-section');
+                const currentPlanName = document.getElementById('current-plan-name');
+                const currentPlanDetails = document.getElementById('current-plan-details');
+                const currentPlanPrice = document.getElementById('current-plan-price');
+                const currentPlanPeriod = document.getElementById('current-plan-period');
+
+                if (planType) {
+                    const price = pricingData[planType][billingCycle];
+                    const period = billingCycle === 'monthly' ? '/month' : '/year';
+                    const planName = planDetails[planType].name;
+                    const planFeatures = planDetails[planType].features;
+
+                    currentPlanName.textContent = planName;
+                    currentPlanDetails.textContent = `${planFeatures} • ${billingCycle.charAt(0).toUpperCase() + billingCycle.slice(1)} billing`;
+                    currentPlanPrice.textContent = `$${price}`;
+                    currentPlanPeriod.textContent = period;
+                    
+                    currentPlanSection.style.display = 'block';
+                } else {
+                    currentPlanSection.style.display = 'none';
+                }
+            }
+
+            // Function to update plan cards to show current selection
+            function updatePlanCards(selectedPlanType) {
+                const planCards = document.querySelectorAll('.plan-card');
+                
+                planCards.forEach(card => {
+                    const planType = card.id.replace('-plan-card', '');
+                    const button = card.querySelector('button[data-plan]');
+                    
+                    // Remove current plan styling
+                    card.classList.remove('current-plan-selected');
+                    card.querySelector('.current-plan-badge')?.remove();
+                    
+                    if (button) {
+                        button.classList.remove('current-plan-button');
+                        button.disabled = false;
+                    }
+                    
+                    // Add current plan styling to selected plan
+                    if (planType === selectedPlanType) {
+                        card.classList.add('current-plan-selected');
+                        
+                        // Add current plan badge
+                        const badge = document.createElement('div');
+                        badge.className = 'current-plan-badge';
+                        badge.textContent = 'Current Plan';
+                        card.appendChild(badge);
+                        
+                        // Update button
+                        if (button) {
+                            button.classList.add('current-plan-button');
+                            button.textContent = 'Current Plan';
+                            button.disabled = true;
+                        }
+                    } else {
+                        // Reset button text
+                        if (button) {
+                            const planName = planDetails[planType].name;
+                            button.textContent = `Choose ${planName}`;
+                        }
+                    }
+                });
+            }
 
             // Billing cycle toggle functionality
             const toggleButtons = document.querySelectorAll('.toggle-button');
@@ -609,6 +736,11 @@
                 } else {
                     savingsText.textContent = 'You\'re saving 17% with yearly billing!';
                 }
+
+                // Update current plan display if there's a current plan
+                if (currentPlan) {
+                    updateCurrentPlanDisplay(currentPlan.type, billingCycle);
+                }
             }
 
             // Form submission
@@ -648,16 +780,186 @@
                 }, 2000);
             });
 
-            // Plan upgrade buttons
-            const upgradeButtons = document.querySelectorAll('.plan-card button');
-            upgradeButtons.forEach(button => {
+            // Plan selection and payment modal
+            const planButtons = document.querySelectorAll('.plan-card button[data-plan]');
+            const paymentModal = document.getElementById('payment-modal');
+            const closeModal = document.getElementById('close-modal');
+            const cancelPayment = document.getElementById('cancel-payment');
+            const paymentForm = document.getElementById('payment-form');
+            const processPayment = document.getElementById('process-payment');
+            const paymentButtonText = document.getElementById('payment-button-text');
+
+            // Plan details for modal
+            const planDetails = {
+                basic: {
+                    name: 'Basic Plan',
+                    features: 'Up to 10 interviewers, 50 candidates/month, basic features'
+                },
+                premium: {
+                    name: 'Premium Plan', 
+                    features: 'Up to 50 interviewers, unlimited candidates, advanced features'
+                },
+                enterprise: {
+                    name: 'Enterprise Plan',
+                    features: 'Unlimited interviewers, unlimited candidates, all features'
+                }
+            };
+
+            // Open payment modal when plan is selected
+            planButtons.forEach(button => {
                 button.addEventListener('click', function() {
-                    const planName = this.textContent.replace('Upgrade to ', '');
-                    alert(`Upgrade to ${planName} would be processed here!`);
+                    const planType = this.getAttribute('data-plan');
+                    const currentBilling = document.querySelector('.toggle-button.active').getAttribute('data-billing');
+                    
+                    // Update modal with plan details
+                    document.getElementById('modal-plan-name').textContent = planDetails[planType].name;
+                    document.getElementById('modal-features').textContent = planDetails[planType].features;
+                    
+                    // Update pricing in modal
+                    const price = pricingData[planType][currentBilling];
+                    const period = currentBilling === 'monthly' ? '/month' : '/year';
+                    document.getElementById('modal-price').textContent = `$${price}`;
+                    document.getElementById('modal-period').textContent = period;
+                    
+                    // Show modal
+                    paymentModal.style.display = 'block';
                 });
+            });
+
+            // Close modal functions
+            function closePaymentModal() {
+                paymentModal.style.display = 'none';
+                paymentForm.reset();
+                processPayment.disabled = false;
+                paymentButtonText.textContent = 'Process Payment';
+            }
+
+            closeModal.addEventListener('click', closePaymentModal);
+            cancelPayment.addEventListener('click', closePaymentModal);
+
+            // Close modal when clicking outside
+            paymentModal.addEventListener('click', function(e) {
+                if (e.target === paymentModal) {
+                    closePaymentModal();
+                }
+            });
+
+            // Payment form submission
+            paymentForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Disable button and show loading
+                processPayment.disabled = true;
+                paymentButtonText.textContent = 'Processing...';
+                
+                // Simulate payment processing
+                setTimeout(() => {
+                    // Get the selected plan from the modal
+                    const modalPlanName = document.getElementById('modal-plan-name').textContent;
+                    const planType = Object.keys(planDetails).find(key => 
+                        planDetails[key].name === modalPlanName
+                    );
+                    const billingCycle = document.querySelector('.toggle-button.active').getAttribute('data-billing');
+                    
+                    // Set current plan
+                    currentPlan = { type: planType, billing: billingCycle };
+                    
+                    // Update displays
+                    updateCurrentPlanDisplay(planType, billingCycle);
+                    updatePlanCards(planType);
+                    
+                    // Show success message
+                    alert('Payment processed successfully! Your plan has been activated.');
+                    closePaymentModal();
+                }, 2000);
             });
         });
     </script>
     </div> <!-- Close main content div -->
+
+    <!-- Payment Modal -->
+    <div id="payment-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 modal-backdrop" style="display: none;">
+        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white modal-content">
+            <div class="mt-3">
+                <!-- Modal Header -->
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-medium text-gray-900" id="modal-plan-name">Choose Plan</h3>
+                    <button id="close-modal" class="text-gray-400 hover:text-gray-600">
+                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Plan Details -->
+                <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                    <div class="text-center">
+                        <div class="flex items-baseline justify-center mb-2">
+                            <span class="text-3xl font-bold text-gray-900" id="modal-price">$99</span>
+                            <span class="text-gray-600 ml-1" id="modal-period">/month</span>
+                        </div>
+                        <p class="text-sm text-gray-600" id="modal-features">Premium features included</p>
+                    </div>
+                </div>
+
+                <!-- Payment Form -->
+                <form id="payment-form" class="space-y-4">
+                    <!-- Card Number -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Card Number</label>
+                        <input type="text" 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md payment-input" 
+                               placeholder="1234 5678 9012 3456"
+                               maxlength="19">
+                    </div>
+
+                    <!-- Expiry and CVV -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Expiry Date</label>
+                            <input type="text" 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md payment-input" 
+                                   placeholder="MM/YY"
+                                   maxlength="5">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">CVV</label>
+                            <input type="text" 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md payment-input" 
+                                   placeholder="123"
+                                   maxlength="4">
+                        </div>
+                    </div>
+
+                    <!-- Billing Address -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Billing Address</label>
+                        <input type="text" 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md payment-input" 
+                               placeholder="123 Main St, City, State 12345">
+                    </div>
+
+                    <!-- Terms and Conditions -->
+                    <div class="flex items-start">
+                        <input type="checkbox" id="terms" class="mt-0.5 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                        <label for="terms" class="ml-2 text-sm text-gray-600">
+                            I agree to the <a href="#" class="text-blue-600 hover:text-blue-500">Terms of Service</a> and <a href="#" class="text-blue-600 hover:text-blue-500">Privacy Policy</a>
+                        </label>
+                    </div>
+
+                    <!-- Payment Buttons -->
+                    <div class="flex space-x-3 pt-4">
+                        <button type="button" id="cancel-payment" class="flex-1 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors">
+                            Cancel
+                        </button>
+                        <button type="submit" id="process-payment" class="flex-1 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors">
+                            <span id="payment-button-text">Process Payment</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>
